@@ -10,6 +10,21 @@ const K = 'asisazul-live-v1';
 const mem = (() => { try { return JSON.parse(localStorage.getItem(K)) || {}; } catch { return {}; } })();
 const keep = () => { try { localStorage.setItem(K, JSON.stringify(mem)); } catch {} };
 
+// Botón «Mostrar / Ocultar» en cada campo de contraseña, para no equivocarse al escribir.
+for (const id of ['livePass', 'liveNewPass', 'liveResetPass']) {
+  const input = $(id); if (!input) continue;
+  const wrap = document.createElement('span'); wrap.className = 'pw';
+  input.replaceWith(wrap); wrap.append(input);
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'pw-btn'; b.textContent = 'Mostrar';
+  b.setAttribute('aria-pressed', 'false'); b.setAttribute('aria-label', 'Mostrar contraseña');
+  b.onclick = () => {
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password'; b.textContent = show ? 'Ocultar' : 'Mostrar';
+    b.setAttribute('aria-pressed', String(show)); b.setAttribute('aria-label', show ? 'Ocultar contraseña' : 'Mostrar contraseña');
+  };
+  wrap.append(b);
+}
+
 $('liveSetup').hidden = configured;
 if (configured) init();
 

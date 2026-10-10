@@ -176,3 +176,5 @@ dialog::backdrop{background:#0007}
 .home-grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .tile .td{color:var(--ink);opacity:.82}
 @media(max-width:600px){.hero{padding-bottom:9.5rem}.scene{height:140px}.tiles{margin-top:-1.8rem}}
+.pw{position:relative;display:block}.pw input{padding-right:6.2rem}
+.pw-btn{position:absolute;right:.3rem;top:50%;transform:translateY(-50%);min-height:38px;padding:.1rem .8rem;font-weight:700;border-radius:10px}

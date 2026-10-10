@@ -14,6 +14,7 @@ Web para ayudar a personas autistas y con discapacidad a organizar su día. Esta
 - **Cómo llegar:** cada evento con lugar tiene un botón que abre el mapa con la ruta. Si guardaste la ubicación exacta, usa esa; si no, usa el texto del lugar.
 - **Ubicación del evento:** en el formulario, «Usar mi ubicación actual como lugar» guarda el punto exacto (por ejemplo, estando en el consultorio).
 - **Ver cuánto falta:** en «Qué pasa hoy», un botón calcula la distancia en línea recta y un tiempo aproximado a pie.
+- **Contraseñas con botón «Mostrar / Ocultar»** para no equivocarse al escribirlas.
 - **Ubicación en vivo (propia):** compartir la ubicación en tiempo real con familiares vinculados por un código, con duración limitada y mapa dentro de la app. Usa Supabase con cuentas de correo y contraseña; ver `supabase/README.md` para activarlo. Hasta que se configure, no envía nada.
 - **¿Dónde estoy?:** muestra tu posición, con enlace al mapa para copiar o compartir cuando tú quieras.
 - **🆘 Necesito ayuda:** un botón siempre visible que muestra tu ficha en letra grande para que otra persona sepa cómo ayudarte, con botones para llamar a emergencias y a tus contactos, y un mensaje con tu ubicación que tú eliges a quién enviar. Nada se envía solo.
