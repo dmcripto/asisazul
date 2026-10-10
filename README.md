@@ -37,6 +37,23 @@ python3 -m http.server 8080
 
 Abre http://localhost:8080. Para que suenen las alarmas, toca **🔔 Activar alarmas** y deja la pestaña abierta.
 
+## App de Android (Capacitor)
+
+La app es la misma web envuelta con [Capacitor](https://capacitorjs.com), sin rehacer el código. Las alarmas se programan en el sistema de Android (`native.js`), así que suenan con la app cerrada. Se reprograman cada vez que cambias un evento (hasta 60 días hacia adelante, máximo 400 alarmas).
+
+```
+npm run android:sync   # copia la web a www/ y actualiza el proyecto android/
+npm run android:apk    # genera el APK de prueba (necesita Java 17+ y el SDK de Android)
+```
+
+También se puede generar sin instalar nada: en GitHub, pestaña **Actions → Generar APK → Run workflow**. Solo corre cuando lo pides a mano y deja el APK para descargar.
+
+Notas:
+- `android:allowBackup` está desactivado, para que los datos de salud no se copien a la nube de Google.
+- Permisos: notificaciones, alarmas exactas, vibración y ubicación (solo al tocar los botones).
+- En la app, «Avisarme en 5 min» (posponer) todavía no está; eso es de la pantalla de alarma de la web.
+- Todavía no se probó en un teléfono real. Publicar en Play Store queda para cuando la app esté terminada.
+
 ## Pruebas
 
 ```
@@ -57,6 +74,9 @@ Las pruebas (vitest) cubren la lógica pura de `logic.js`: repetir el día de la
 | `pictos.js` | Lógica pura de pictogramas |
 | `pictos-api.js` | Búsqueda en ARASAAC con caché local |
 | `pictos-ui.js` | Pantalla de pictogramas |
+| `native.js` | Alarmas nativas de Android |
+| `capacitor.config.json`, `android/` | Proyecto de la app de Android |
+| `scripts/build-web.mjs` | Copia la web a `www/` |
 | `style.css` | Estilos |
 | `tests/agenda-tea.test.ts` | Pruebas |
 
@@ -64,7 +84,7 @@ Las pruebas (vitest) cubren la lógica pura de `logic.js`: repetir el día de la
 
 - Aviso de «es hora de salir» según la ruta y el tráfico, y seguimiento con la pantalla apagada (requiere la app de Android).
 - Ubicación en vivo para familiares o cuidadores: necesita servidor, cuenta y consentimiento explícito. Se hará junto con «compartir agenda».
-- Alarmas en segundo plano en Android.
+- Probar el APK en un teléfono real; posponer 5 min en las alarmas nativas.
 - Compartir la agenda con familiares o cuidadores.
 - Registro de señales (sobrecarga sensorial, ánimo, crisis) y regulación emocional.
 

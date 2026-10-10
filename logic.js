@@ -77,3 +77,20 @@ export function toICS(events) {
   lines.push('END:VCALENDAR');
   return lines.join('\r\n');
 }
+
+// Alarmas futuras para programar en el sistema (app de Android): [{key,title,body,at}] ordenadas por hora.
+export function planAlarms(events, now, days = 60, max = 400) {
+  const out = [], limit = now + days * 86400000;
+  for (const e of events) {
+    const { y, m, d } = parseISO(e.date);
+    const [hh, mm] = (e.time || '00:00').split(':').map(Number);
+    const start = new Date(y, m, d, hh, mm).getTime();
+    for (const lead of e.remind || []) {
+      const at = start - lead * 60000;
+      if (at <= now || at > limit) continue;
+      const when = lead === 0 ? 'Es ahora' : lead >= 60 ? `Falta${lead >= 120 ? 'n' : ''} ${lead / 60} h` : `Faltan ${lead} min`;
+      out.push({ key: `${e.id}|${lead}`, title: e.title, body: `${when} · ${e.time}${e.place ? ' · ' + e.place : ''}`, at });
+    }
+  }
+  return out.sort((a, b) => a.at - b.at).slice(0, max);
+}

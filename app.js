@@ -1,4 +1,5 @@
 import { distanceKm, describeDistance, directionsUrl, mapUrl, shareText } from './geo.js';
+import { isNative, scheduleNative } from './native.js';
 import { lookup } from './pictos-api.js';
 import { imageUrl } from './pictos.js';
 import { pad, monthKey, daysIn, iso, parseISO, addMonth, autoFill, dueAlarms, toICS } from './logic.js';
@@ -8,7 +9,7 @@ const KEY = 'agenda-tea-v1';
 const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch { return null; } };
 const state = load() || { events: [], template: null, generated: [], fired: {}, snooze: {}, fs: 17 };
-const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} scheduleNative(state.events); };
 
 const now0 = new Date();
 let view = { y: now0.getFullYear(), m: now0.getMonth() };
@@ -167,6 +168,7 @@ $('aOk').onclick = stop;
 $('aSnooze').onclick = () => { state.snooze[current.key] = Date.now() + 5 * 60000; save(); stop(); };
 
 function tick() {
+  if (isNative) return; // en la app, las alarmas las programa el sistema (native.js)
   if ($('alarm').open) return;
   const t = Date.now();
   for (const [key, at] of Object.entries(state.snooze)) {
@@ -181,7 +183,7 @@ function tick() {
 
 // Al abrir y cada día: completa los meses que falten.
 if (autoFill(state, new Date()).length) save();
-render(); tick(); setInterval(tick, 15000); setInterval(renderToday, 60000);
+scheduleNative(state.events); render(); tick(); setInterval(tick, 15000); setInterval(renderToday, 60000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { if (autoFill(state, new Date()).length) { save(); render(); } tick(); } });
 
 // ---- Ubicación (solo cuando se toca el botón) ----

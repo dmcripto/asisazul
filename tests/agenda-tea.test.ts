@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { planAlarms } from '../logic.js';
 // @ts-ignore JS puro
 import { mapDate, autoFill, dueAlarms, toICS } from '../logic.js';
 
@@ -68,5 +69,21 @@ describe('ubicación', () => {
   it('arma el enlace de mapa para compartir', () => {
     expect(mapUrl({ lat: 1, lon: 2 })).toContain('mlat=1&mlon=2');
     expect(shareText({ lat: 1, lon: 2 })).toMatch(/^Estoy aquí: https:/);
+  });
+});
+
+describe('alarmas del sistema', () => {
+  const ev = [{ id: 'a', title: 'Terapia', date: '2026-03-10', time: '10:00', place: 'Consultorio', remind: [1440, 10, 0] }];
+  it('programa solo alarmas futuras, en orden', () => {
+    const now = new Date(2026, 2, 10, 9, 0).getTime();
+    const p = planAlarms(ev, now);
+    expect(p.map((x) => x.key)).toEqual(['a|10', 'a|0']);
+    expect(p[0].body).toBe('Faltan 10 min · 10:00 · Consultorio');
+    expect(p[1].body).toContain('Es ahora');
+  });
+  it('respeta el límite de días y de cantidad', () => {
+    const now = new Date(2026, 0, 1).getTime();
+    expect(planAlarms(ev, now, 30)).toHaveLength(0);
+    expect(planAlarms(ev, now, 90, 2)).toHaveLength(2);
   });
 });
