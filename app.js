@@ -36,15 +36,29 @@ const pic = (e) => e.picto ? `<img class="eimg" src="${imageUrl(e.picto)}" alt="
 const way = (e) => { const u = directionsUrl(e); return u ? `<a class="btnlink" href="${u}" target="_blank" rel="noopener">🧭 Cómo llegar</a>` : ''; };
 const lead = (m) => m === 0 ? 'a la hora' : m >= 60 ? m / 60 + ' h antes' : m + ' min antes';
 
+function renderHello(evs) {
+  const h = new Date().getHours();
+  let name = '';
+  try { name = (JSON.parse(localStorage.getItem('asisazul-extras-v1')).ficha.name || '').trim().split(/\s+/)[0]; } catch {}
+  $('hello').textContent = `${h < 6 ? 'Buenas noches' : h < 13 ? 'Buenos días' : h < 20 ? 'Buenas tardes' : 'Buenas noches'}${name ? ', ' + name : ''}`;
+  const hm = pad(new Date().getHours()) + ':' + pad(new Date().getMinutes());
+  const next = evs.find((e) => e.time >= hm);
+  const day = new Date().toLocaleDateString('es', { weekday: 'long', day: 'numeric', month: 'long' });
+  $('helloSub').textContent = `${day[0].toUpperCase() + day.slice(1)} · ` + (evs.length ? (next ? `Sigue: ${next.time} ${next.title}` : 'Ya hiciste todo lo de hoy') : 'Hoy no hay nada en la agenda');
+}
+window.addEventListener('ficha', () => renderToday());
+
 function renderToday() {
   const d = new Date(), t = iso(d.getFullYear(), d.getMonth(), d.getDate());
   const hm = pad(d.getHours()) + ':' + pad(d.getMinutes());
-  const evs = evOn(t), nextI = evs.findIndex((e) => e.time >= hm);
+  const evs = evOn(t);
+  renderHello(evs);
+  const nextI = evs.findIndex((e) => e.time >= hm);
   $('todayList').innerHTML = evs.map((e, i) => {
     const cls = e.time < hm ? 'past' : i === nextI ? 'now' : '';
     const tag = e.time < hm ? 'Ya pasó' : i === nextI ? 'Sigue' : 'Después';
     return `<div class="step ${cls}">${e.picto ? `<img src="${imageUrl(e.picto)}" alt="" loading="lazy">` : ''}<div><span class="tag">${tag}</span><div class="big">${e.time} · ${esc(e.title)}</div>${e.place ? `<div>📍 ${esc(e.place)}</div>` : ''}<div class="bar">${way(e)}${Number.isFinite(e.lat) ? `<button data-dist="${esc(e.id)}">📏 Ver cuánto falta</button>` : ''}</div><div class="distOut" id="dist-${esc(e.id)}"></div>${e.notes ? `<div>📝 ${esc(e.notes)}</div>` : ''}</div></div>`;
-  }).join('') || '<p style="color:var(--mute)">Hoy no hay nada en la agenda. Día libre.</p>';
+  }).join('') || '<div class="empty"><svg class="art a-teal" viewBox="0 0 160 110" aria-hidden="true"><use href="#art-sol"/></svg><p>Hoy no hay nada en la agenda. Día libre.</p></div>';
 }
 
 function render() {
@@ -69,7 +83,7 @@ function render() {
   $('tplInfo').textContent = t ? `Modelo actual: ${MONTHS[Number(t.slice(5)) - 1]} ${t.slice(0, 4)}. Meses ya generados: ${state.generated.length}.` : 'Todavía no elegiste un mes modelo.';
   $('tpl').textContent = t === k ? '✔ Este mes es el modelo' : 'Usar este mes como modelo';
   const notif = 'Notification' in window ? Notification.permission : 'denied';
-  $('banner').innerHTML = notif === 'granted' ? '' : '<div class="banner">Para que suenen las alarmas tocá <b>🔔 Activar alarmas</b> y dejá esta pestaña abierta. Para alarmas con la app cerrada, usá <b>Exportar al teléfono</b>.</div>';
+  $('banner').innerHTML = notif === 'granted' ? '' : '<div class="banner">Para que suenen las alarmas tocá <b>🔔 Alarmas</b> y dejá esta pestaña abierta. Para alarmas con la app cerrada, usá <b>Exportar .ics</b>.</div>';
 }
 
 $('grid').onclick = (e) => { const b = e.target.closest('[data-d]'); if (!b) return; sel = b.dataset.d; const p = parseISO(sel); view = { y: p.y, m: p.m }; render(); };

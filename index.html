@@ -3,38 +3,65 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Mi Agenda</title>
+<title>Asisazul — Mi Agenda</title>
 <link rel="stylesheet" href="vendor/leaflet.css">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%234b8f8c%27/%3E%3C/svg%3E">
 </head>
 <body>
-<header>
-  <h1>📅 Mi Agenda</h1>
-  <div class="bar">
-    <button id="txt" aria-label="Cambiar tamaño de texto">Aa</button>
-    <button id="theme">🌓 Tema: automático</button>
-    <button id="sound">🔔 Activar alarmas</button>
-    <button id="where">📍 ¿Dónde estoy?</button>
-    <button id="sosOpen" class="sos">🆘 Necesito ayuda</button>
-    <button id="ics">⬇ Exportar al teléfono (.ics)</button>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+<symbol id="i-hoy" viewBox="0 0 48 48"><circle cx="24" cy="24" r="9" fill="var(--acc)" stroke="currentColor" stroke-width="2.5"/><g stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M24 5v5M24 38v5M5 24h5M38 24h5M10.6 10.6l3.5 3.5M33.9 33.9l3.5 3.5M37.4 10.6l-3.5 3.5M14.1 33.9l-3.5 3.5"/></g></symbol>
+<symbol id="i-cal" viewBox="0 0 48 48"><rect x="7" y="10" width="34" height="31" rx="7" fill="var(--acc)" stroke="currentColor" stroke-width="2.5"/><path d="M7 20h34" stroke="currentColor" stroke-width="2.5"/><path d="M16 6v8M32 6v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><g fill="currentColor"><circle cx="16" cy="28" r="2"/><circle cx="24" cy="28" r="2"/><circle cx="32" cy="28" r="2"/><circle cx="16" cy="35" r="2"/><circle cx="24" cy="35" r="2"/></g></symbol>
+<symbol id="i-rutinas" viewBox="0 0 48 48"><rect x="9" y="6" width="30" height="36" rx="7" fill="var(--acc)" stroke="currentColor" stroke-width="2.5"/><g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 16l3 3 5-6M15 27l3 3 5-6M28 17h6M28 28h6M15 37h4"/></g></symbol>
+<symbol id="i-senales" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17" fill="var(--acc)" stroke="currentColor" stroke-width="2.5"/><circle cx="18" cy="21" r="2.2" fill="currentColor"/><circle cx="30" cy="21" r="2.2" fill="currentColor"/><path d="M16 29c2.5 4.5 13.5 4.5 16 0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></symbol>
+<symbol id="i-calma" viewBox="0 0 48 48"><circle cx="24" cy="24" r="19" fill="none" stroke="currentColor" stroke-width="2" opacity=".45"/><circle cx="24" cy="24" r="13" fill="none" stroke="currentColor" stroke-width="2.5" opacity=".75"/><circle cx="24" cy="24" r="7" fill="var(--acc)" stroke="currentColor" stroke-width="2.5"/></symbol>
+<symbol id="i-pictos" viewBox="0 0 48 48"><path d="M10 8h28a5 5 0 0 1 5 5v16a5 5 0 0 1-5 5H24l-9 8v-8h-5a5 5 0 0 1-5-5V13a5 5 0 0 1 5-5z" fill="var(--acc)" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M12 28l8-9 6 6 4-4 6 7z" fill="currentColor" opacity=".8"/><circle cx="31" cy="16" r="3" fill="currentColor"/></symbol>
+<symbol id="i-live" viewBox="0 0 48 48"><path d="M24 43S9 29 9 19a15 15 0 0 1 30 0c0 10-15 24-15 24z" fill="var(--acc)" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="24" cy="19" r="5.5" fill="#fff" stroke="currentColor" stroke-width="2.5"/></symbol>
+<symbol id="i-ayuda" viewBox="0 0 48 48"><rect x="5" y="9" width="38" height="30" rx="7" fill="var(--acc)" stroke="currentColor" stroke-width="2.5"/><circle cx="17" cy="23" r="5" fill="#fff" stroke="currentColor" stroke-width="2.5"/><path d="M9 34c1-5 4-7 8-7s7 2 8 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M30 19h8M30 26h8M30 33h5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></symbol>
+<symbol id="i-sos" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="#fff" stroke-width="9"/><circle cx="24" cy="24" r="15" fill="none" stroke="var(--acc)" stroke-width="9" stroke-dasharray="23.5 23.5"/><circle cx="24" cy="24" r="19.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="24" r="10.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+<symbol id="i-share" viewBox="0 0 48 48"><g fill="var(--acc)" stroke="currentColor" stroke-width="2.5"><circle cx="35" cy="11" r="6"/><circle cx="13" cy="24" r="6"/><circle cx="35" cy="37" r="6"/></g><path d="M18 21l12-7M18 27l12 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></symbol>
+<symbol id="i-mes" viewBox="0 0 48 48"><path d="M38 20a15 15 0 0 0-26-6M10 28a15 15 0 0 0 26 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M12 6v9h9M36 42v-9h-9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="24" r="5" fill="var(--acc)" stroke="currentColor" stroke-width="2.5"/></symbol>
+<symbol id="art-sol" viewBox="0 0 160 110"><circle cx="112" cy="36" r="18" fill="#ffd9a0"/><path d="M0 110V82q40-26 80-8t80-6v42z" fill="var(--h1)"/><path d="M0 110V94q50-18 100-4t60-4v24z" fill="var(--h2)"/><g transform="translate(36 72)"><path d="M0 22V6" stroke="var(--h3)" stroke-width="3" stroke-linecap="round"/><circle cx="0" cy="3" r="6" fill="#f4b8c7"/><circle cx="0" cy="3" r="2.5" fill="#ffd9a0"/></g></symbol>
+<symbol id="art-brote" viewBox="0 0 160 110"><ellipse cx="80" cy="98" rx="46" ry="7" fill="var(--h1)"/><path d="M58 70h44l-6 28H64z" fill="#e8b4a0"/><path d="M80 70V44" stroke="var(--h3)" stroke-width="4" stroke-linecap="round"/><path d="M80 52c-18 0-24-14-22-22 14 0 22 8 22 22zM80 46c14-2 22-10 22-20-14 0-22 8-22 20z" fill="var(--h2)"/></symbol>
+</defs></svg>
+<header class="hero">
+  <div class="hero-top">
+    <span class="brand"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="14" fill="var(--main)"/><circle cx="24" cy="24" r="10" fill="none" stroke="var(--main-ink)" stroke-width="3" opacity=".55"/><circle cx="24" cy="24" r="4.5" fill="var(--main-ink)"/></svg>Asisazul</span>
+    <span class="hero-tools"><button id="txt" aria-label="Cambiar tamaño de texto">Aa</button><button id="theme">🌓 Tema: automático</button></span>
   </div>
+  <h1 id="hello">Hola</h1>
+  <p id="helloSub" class="hello-sub"></p>
+  <div class="hero-actions">
+    <button id="sosOpen" class="sos"><svg class="ico sm a-sos" aria-hidden="true"><use href="#i-sos"/></svg>Necesito ayuda</button>
+    <button id="sound">🔔 Alarmas</button>
+    <button id="where">📍 ¿Dónde estoy?</button>
+    <button id="ics">⬇ Exportar .ics</button>
+  </div>
+  <svg class="scene" viewBox="0 0 800 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <circle cx="660" cy="62" r="34" fill="#ffd9a0"/>
+    <g fill="#fff" opacity=".85"><ellipse cx="140" cy="52" rx="46" ry="14"/><ellipse cx="172" cy="44" rx="30" ry="12"/><ellipse cx="470" cy="36" rx="40" ry="12"/><ellipse cx="496" cy="30" rx="26" ry="10"/></g>
+    <path d="M0 200V120q120-50 260-20t260-12 280 22v90z" fill="var(--h1)"/>
+    <path d="M0 200V150q160-36 330-6t470-8v64z" fill="var(--h2)"/>
+    <g transform="translate(560 110)"><rect x="0" y="22" width="52" height="40" rx="4" fill="#fff6ea"/><path d="M-6 26L26 0l32 26z" fill="#e8b4a0"/><rect x="21" y="38" width="12" height="24" rx="3" fill="var(--h3)"/></g>
+    <g fill="var(--h3)"><rect x="196" y="120" width="6" height="30" rx="3"/><circle cx="199" cy="112" r="20"/><rect x="250" y="132" width="5" height="22" rx="2.5"/><circle cx="252" cy="126" r="14"/><rect x="690" y="130" width="5" height="22" rx="2.5"/><circle cx="692" cy="124" r="15"/></g>
+    <path d="M330 200q40-34 90-40t120-6" fill="none" stroke="#fff6ea" stroke-width="10" stroke-linecap="round" opacity=".8"/>
+  </svg>
 </header>
 <main>
-  <nav class="bar" aria-label="Secciones">
-    <a class="btnlink" href="#today">Hoy</a><a class="btnlink" href="#rutinas">Rutinas</a><a class="btnlink" href="#senales">Señales</a><a class="btnlink" href="#calma">Calma</a><a class="btnlink" href="#pictos">Pictogramas</a><a class="btnlink" href="#live">Ubicación</a><a class="btnlink" href="#ayuda">Mi ficha</a>
-  </nav>
+  <nav class="tiles" aria-label="Secciones"><a class="tile" href="#hoy"><svg class="ico a-amber" aria-hidden="true"><use href="#i-hoy"/></svg><span>Hoy</span></a><a class="tile" href="#calendario"><svg class="ico a-teal" aria-hidden="true"><use href="#i-cal"/></svg><span>Calendario</span></a><a class="tile" href="#rutinas"><svg class="ico a-amber" aria-hidden="true"><use href="#i-rutinas"/></svg><span>Rutinas</span></a><a class="tile" href="#senales"><svg class="ico a-lav" aria-hidden="true"><use href="#i-senales"/></svg><span>Señales</span></a><a class="tile" href="#calma"><svg class="ico a-sky" aria-hidden="true"><use href="#i-calma"/></svg><span>Calma</span></a><a class="tile" href="#pictos"><svg class="ico a-rose" aria-hidden="true"><use href="#i-pictos"/></svg><span>Pictogramas</span></a><a class="tile" href="#live"><svg class="ico a-green" aria-hidden="true"><use href="#i-live"/></svg><span>Ubicación</span></a><a class="tile" href="#ayuda"><svg class="ico a-teal" aria-hidden="true"><use href="#i-ayuda"/></svg><span>Mi ficha</span></a></nav>
   <div id="banner"></div>
   <section class="card" id="whereCard" hidden aria-live="polite">
-    <h3 style="margin-top:0">¿Dónde estoy?</h3>
+    <h3 class="sh"><svg class="ico a-green" aria-hidden="true"><use href="#i-live"/></svg>¿Dónde estoy?</h3>
     <div id="whereInfo"></div>
     <div class="bar"><button id="whereCopy">Copiar enlace</button><button id="whereShare">Compartir</button><button id="whereClose">Cerrar</button></div>
     <small>Tu ubicación solo se usa en este momento y no se guarda ni se envía a ningún servidor. Si la compartes, decides tú con quién.</small>
   </section>
-  <section class="card" id="today" aria-labelledby="todayH">
-    <h2 id="todayH" style="margin-top:0">Qué pasa hoy</h2>
+  <section class="card" id="hoy" aria-labelledby="todayH">
+    <h2 id="todayH" class="sh"><svg class="ico a-amber" aria-hidden="true"><use href="#i-hoy"/></svg>Qué pasa hoy</h2>
     <div id="todayList"></div>
   </section>
+  <section class="card" id="calendario" aria-label="Calendario">
   <div class="bar">
     <button id="prev" aria-label="Mes anterior">◀</button>
     <h2 id="title"></h2>
@@ -43,20 +70,21 @@
   </div>
   <div class="grid" id="dow"></div>
   <div class="grid" id="grid"></div>
+  </section>
 
   <section class="card">
-    <div class="bar"><h3 id="dayTitle" style="margin:0 auto 0 0"></h3><button class="primary" id="add">＋ Agregar</button></div>
+    <div class="bar"><h3 id="dayTitle" class="sh" style="margin:0 auto 0 0"></h3><button class="primary" id="add">＋ Agregar</button></div>
     <div id="list"></div>
   </section>
 
   <section class="card">
-    <h3 style="margin-top:0">Completar el mes automáticamente</h3>
+    <h3 class="sh"><svg class="ico a-teal" aria-hidden="true"><use href="#i-mes"/></svg>Completar el mes automáticamente</h3>
     <p>Cargá todas las terapias y turnos de <b id="tplName"></b> una sola vez y tocá el botón. Desde ese momento, cada mes nuevo se llena solo: cada evento se repite el mismo día de la semana (ej.: «2.º martes»).</p>
     <div class="bar"><button class="primary" id="tpl">Usar este mes como modelo</button><button id="regen">Volver a generar los meses siguientes</button><button id="notpl">Dejar de repetir</button></div>
     <p id="tplInfo"></p>
   </section>
   <section class="card" id="pictos">
-    <h3 style="margin-top:0">Frase en pictogramas</h3>
+    <h3 class="sh"><svg class="ico a-rose" aria-hidden="true"><use href="#i-pictos"/></svg>Frase en pictogramas</h3>
     <p>Escribe una frase y cada palabra se muestra con su pictograma. Las palabras que escribes se envían a ARASAAC solo para buscar la imagen.</p>
     <div class="bar"><input id="pText" aria-label="Frase" placeholder="Ej.: yo camino al colegio" style="flex:1;min-width:12rem"><button class="primary" id="pGo">Mostrar</button></div>
     <div class="bar"><button id="pMic">🎙 Dictar</button><button id="pSpeak">🔊 Leer en voz alta</button><button id="pPrint">🖨 Imprimir o guardar PDF</button></div>
@@ -65,7 +93,7 @@
     <small>Pictogramas: <a href="https://arasaac.org">ARASAAC</a> (Gobierno de Aragón), autor Sergio Palao, licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es">CC BY-NC-SA</a>.</small>
   </section>
   <section class="card" id="shareGuide">
-    <h3 style="margin-top:0">Compartir mi ubicación con un familiar</h3>
+    <h3 class="sh"><svg class="ico a-green" aria-hidden="true"><use href="#i-share"/></svg>Compartir mi ubicación con un familiar</h3>
     <p>Asisazul no envía tu ubicación a nadie. Si quieres que un familiar te vea en el mapa, puedes usar una de estas apps. Tú decides con quién y por cuánto tiempo, y puedes parar cuando quieras.</p>
     <details><summary>WhatsApp</summary>
       <ol><li>Abre el chat con tu familiar.</li><li>Toca el clip o el «+» y elige <b>Ubicación</b>.</li><li>Elige <b>Compartir ubicación en tiempo real</b>.</li><li>Elige cuánto tiempo: 15 minutos, 1 hora u 8 horas.</li><li>Para parar antes: abre el chat y toca <b>Dejar de compartir</b>.</li></ol></details>
@@ -76,7 +104,7 @@
     <p><small>Los nombres de los menús pueden cambiar un poco según la versión de la app. Cuando termines, comprueba que la ubicación haya dejado de compartirse. Si no estás seguro de cómo hacerlo, pide ayuda a alguien de confianza.</small></p>
   </section>
   <section class="card" id="live">
-    <h3 style="margin-top:0">Ubicación en vivo</h3>
+    <h3 class="sh"><svg class="ico a-green" aria-hidden="true"><use href="#i-live"/></svg>Ubicación en vivo</h3>
     <div id="liveSetup" hidden><p>Esta función todavía no está configurada. Falta conectar el servicio de Supabase (ver <b>supabase/README.md</b>).</p></div>
     <div id="liveAuth" hidden>
       <p>Para compartir o ver ubicaciones, entra con tu cuenta. Cada persona solo ve sus propios datos y los de quienes se vinculan con ella.</p>
@@ -111,7 +139,7 @@
     </div>
   </section>
   <section class="card" id="rutinas">
-    <h3 style="margin-top:0">Rutinas paso a paso</h3>
+    <h3 class="sh"><svg class="ico a-amber" aria-hidden="true"><use href="#i-rutinas"/></svg>Rutinas paso a paso</h3>
     <p>Toca cada paso cuando lo termines. El avance se reinicia solo cada día.</p>
     <div id="rList"></div>
     <details><summary>Crear una rutina</summary>
@@ -123,7 +151,7 @@
   </section>
 
   <section class="card" id="senales">
-    <h3 style="margin-top:0">Registro de señales</h3>
+    <h3 class="sh"><svg class="ico a-lav" aria-hidden="true"><use href="#i-senales"/></svg>Registro de señales</h3>
     <p>Anota cómo estás. Sirve para notar patrones y contárselo a tu terapeuta. Queda solo en tu teléfono.</p>
     <fieldset class="fs"><legend>¿Cómo te sientes?</legend><div class="bar" id="sMood"></div></fieldset>
     <label for="sOver">Sobrecarga sensorial</label><select id="sOver"></select>
@@ -136,7 +164,7 @@
   </section>
 
   <section class="card" id="calma">
-    <h3 style="margin-top:0">Calma</h3>
+    <h3 class="sh"><svg class="ico a-sky" aria-hidden="true"><use href="#i-calma"/></svg>Calma</h3>
     <p>Respira despacio siguiendo el texto. Para cuando todo se siente demasiado.</p>
     <div class="breath"><div id="bCircle" aria-hidden="true"></div><div id="bText" aria-live="polite" class="big">Listo cuando quieras</div></div>
     <div class="bar"><button class="primary" id="bGo">▶ Empezar a respirar</button></div>
@@ -144,7 +172,7 @@
   </section>
 
   <section class="card" id="ayuda">
-    <h3 style="margin-top:0">Mi ficha y contactos de ayuda</h3>
+    <h3 class="sh"><svg class="ico a-teal" aria-hidden="true"><use href="#i-ayuda"/></svg>Mi ficha y contactos de ayuda</h3>
     <p>Esto se muestra al tocar <b>🆘 Necesito ayuda</b>, para que otra persona sepa cómo ayudarte. Queda solo en tu teléfono.</p>
     <label for="fiName">Mi nombre</label><input id="fiName" maxlength="60" autocomplete="name">
     <label for="fiAbout">Lo que debes saber de mí</label><textarea id="fiAbout" rows="2" maxlength="300" placeholder="Ej.: Soy autista. Puedo no poder hablar si estoy muy nervioso."></textarea>
@@ -153,6 +181,9 @@
     <label for="fiHow">Cómo ayudarme</label><textarea id="fiHow" rows="2" maxlength="300" placeholder="Ej.: Habla despacio y bajo. No me toques sin avisar."></textarea>
     <label for="fiEmer">Número de emergencias de tu país</label><input id="fiEmer" inputmode="tel" maxlength="20" placeholder="Ej.: 911 (Argentina)">
     <h4>Contactos de confianza</h4><div id="fiContacts"></div>
+    <h4>Copia de seguridad</h4>
+    <p>Guarda todos tus datos (agenda, ficha, rutinas y registros) en un archivo, por si cambias de teléfono o borras la app. <b>El archivo tiene datos de salud: guárdalo en un lugar privado.</b></p>
+    <div class="bar"><button id="bkSave">💾 Guardar copia</button><button id="bkLoad">📂 Restaurar copia</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div>
   </section>
 </main>
 

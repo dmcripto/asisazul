@@ -1,6 +1,6 @@
 // Copia los archivos de la web a www/ (carpeta que usa Capacitor para la app de Android).
 import { cpSync, rmSync, mkdirSync } from 'node:fs';
-const files = ['index.html', 'app.js', 'logic.js', 'geo.js', 'pictos.js', 'pictos-api.js', 'pictos-ui.js', 'native.js', 'share.js', 'signals.js', 'routines.js', 'calm.js', 'help.js', 'extras-ui.js', 'live.js', 'config.js', 'style.css'];
+const files = ['index.html', 'app.js', 'logic.js', 'geo.js', 'pictos.js', 'pictos-api.js', 'pictos-ui.js', 'native.js', 'share.js', 'signals.js', 'routines.js', 'calm.js', 'help.js', 'backup.js', 'extras-ui.js', 'live.js', 'config.js', 'style.css'];
 const dirs = ['vendor'];
 rmSync('www', { recursive: true, force: true });
 mkdirSync('www');

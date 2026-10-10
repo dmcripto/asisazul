@@ -177,3 +177,19 @@ describe('calma y ayuda', () => {
     expect(helpText({}).split('\n')[0]).toBe('Una persona necesita ayuda.');
   });
 });
+
+import { makeBackup, parseBackup } from '../backup.js';
+describe('copia de seguridad', () => {
+  it('guarda y restaura', () => {
+    const agenda = { events: [{ id: 'a', title: 'T', date: '2026-03-10' }], generated: [], template: '2026-03' };
+    const r = parseBackup(makeBackup(agenda, { routines: [], signals: [] }, Date.UTC(2026, 0, 1)));
+    expect(r.agenda).toEqual(agenda);
+    expect(r.savedAt).toBe('2026-01-01T00:00:00.000Z');
+  });
+  it('rechaza archivos que no son una copia o están dañados', () => {
+    expect(() => parseBackup('hola')).toThrow('no es una copia');
+    expect(() => parseBackup('{"app":"otra"}')).toThrow('no es una copia');
+    expect(() => parseBackup(JSON.stringify({ app: 'asisazul', version: 1, agenda: { events: [{ title: 1 }] } }))).toThrow('dañada');
+    expect(() => parseBackup(JSON.stringify({ app: 'asisazul', version: 1, extras: { signals: 'x' } }))).toThrow('dañada');
+  });
+});

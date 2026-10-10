@@ -22,7 +22,8 @@ Web para ayudar a personas autistas y con discapacidad a organizar su día. Esta
 - **Rutinas paso a paso:** listas con pictogramas (mañana, noche o las tuyas). Se marca cada paso y el avance se reinicia cada día.
 - **Registro de señales:** ánimo, sobrecarga sensorial, crisis y qué la provocó. Muestra un resumen de la semana y exporta un .csv para llevar al terapeuta.
 - **Calma:** respiración guiada con texto y cuenta atrás (sin movimiento si el sistema pide reducirlo) y el ejercicio 5-4-3-2-1.
-- **Barra de secciones** para ir directo a cada parte.
+- **Portada ilustrada** con saludo según la hora, el próximo evento del día y accesos en forma de mosaicos con íconos. Todas las ilustraciones son propias (SVG), caben en el teléfono y no necesitan internet.
+- **Copia de seguridad:** guarda todos los datos del teléfono en un archivo y los restaura (agenda, ficha, rutinas y registros). El archivo contiene datos de salud: hay que guardarlo en un lugar privado.
 
 ## Diseño y privacidad
 
@@ -82,6 +83,7 @@ Las pruebas (vitest) cubren la lógica pura de `logic.js`: repetir el día de la
 | `pictos.js` | Lógica pura de pictogramas |
 | `pictos-api.js` | Búsqueda en ARASAAC con caché local |
 | `pictos-ui.js` | Pantalla de pictogramas |
+| `backup.js` | Copia de seguridad |
 | `extras-ui.js`, `signals.js`, `routines.js`, `calm.js`, `help.js` | Ayuda, ficha, rutinas, señales y calma |
 | `live.js`, `share.js`, `config.js` | Ubicación en vivo (Supabase) |
 | `supabase/` | Tablas, reglas de seguridad y guía de puesta en marcha |
@@ -97,11 +99,9 @@ Las pruebas (vitest) cubren la lógica pura de `logic.js`: repetir el día de la
 - Aviso de «es hora de salir» según la ruta y el tráfico, y seguimiento con la pantalla apagada (requiere la app de Android).
 - Probar la ubicación en vivo con un proyecto real de Supabase y dos teléfonos; añadir límite de intentos de códigos antes de abrirla al público.
 - Compartir la agenda con familiares o cuidadores.
-- Copia de seguridad (exportar e importar todos los datos del teléfono).
 - Probar en un teléfono real: exportar archivos (.ics y .csv) con el menú de compartir de Android, y los botones de llamada.
 - Probar el APK en un teléfono real; posponer 5 min en las alarmas nativas.
 - Compartir la agenda con familiares o cuidadores.
-- Copia de seguridad (exportar e importar todos los datos del teléfono).
 - Probar en un teléfono real: exportar archivos (.ics y .csv) con el menú de compartir de Android, y los botones de llamada.
 - Registro de señales (sobrecarga sensorial, ánimo, crisis) y regulación emocional.
 

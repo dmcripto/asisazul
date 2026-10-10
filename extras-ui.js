@@ -5,6 +5,7 @@ import { breathPhase, GROUNDING } from './calm.js';
 import { telUrl, fichaLines, helpText } from './help.js';
 import { saveFile, shareText } from './native.js';
 import { lookup } from './pictos-api.js';
+import { KEYS, makeBackup, parseBackup } from './backup.js';
 import { imageUrl } from './pictos.js';
 
 const $ = (id) => document.getElementById(id);
@@ -33,7 +34,7 @@ function drawRoutines() {
     box.append(el('div', { className: 'bar' }, el('button', { textContent: 'Borrar rutina', onclick: () => { if (confirm(`¿Borrar «${r.title}»?`)) { data.routines = data.routines.filter((x) => x !== r); save(); drawRoutines(); } } })));
     return box;
   }));
-  if (!data.routines.length) $('rList').textContent = 'Todavía no tienes rutinas.';
+  if (!data.routines.length) $('rList').innerHTML = '<div class="empty"><svg class="art" viewBox="0 0 160 110" aria-hidden="true"><use href="#art-brote"/></svg><p>Todavía no tienes rutinas. Empieza con un ejemplo.</p></div>';
 }
 async function addRoutine(title, lines) {
   const steps = lines.map((text) => ({ id: uid(), text }));
@@ -90,7 +91,7 @@ $('bGo').onclick = () => {
 
 // ---------- Ficha y contactos ----------
 const fmap = { fiName: 'name', fiAbout: 'about', fiAll: 'allergies', fiMeds: 'meds', fiHow: 'howto', fiEmer: 'emergency' };
-for (const [id, k] of Object.entries(fmap)) { $(id).value = data.ficha[k] || ''; $(id).oninput = () => { data.ficha[k] = $(id).value; save(); }; }
+for (const [id, k] of Object.entries(fmap)) { $(id).value = data.ficha[k] || ''; $(id).oninput = () => { data.ficha[k] = $(id).value; save(); if (k === 'name') window.dispatchEvent(new Event('ficha')); }; }
 $('fiContacts').replaceChildren(...data.contacts.map((c, i) => el('div', { className: 'bar' },
   Object.assign(el('input', { placeholder: 'Nombre', value: c.name || '', maxlength: 40 }), { oninput(e) { data.contacts[i].name = e.target.value; save(); } }),
   Object.assign(el('input', { placeholder: 'Teléfono', value: c.phone || '', inputMode: 'tel', maxlength: 20 }), { oninput(e) { data.contacts[i].phone = e.target.value; save(); } }))));
@@ -113,6 +114,21 @@ $('sosSend').onclick = async () => {
   let pos = null;
   try { pos = await new Promise((ok, no) => navigator.geolocation.getCurrentPosition((p) => ok({ lat: p.coords.latitude, lon: p.coords.longitude }), no, { timeout: 8000 })); } catch {}
   await shareText(helpText(data.ficha, pos), 'Necesito ayuda');
+};
+
+// ---------- Copia de seguridad ----------
+const rd = (k) => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
+$('bkSave').onclick = () => saveFile(`asisazul-copia-${dayKey()}.json`, makeBackup(rd(KEYS.agenda), data), 'application/json');
+$('bkLoad').onclick = () => $('bkFile').click();
+$('bkFile').onchange = async (ev) => {
+  const f = ev.target.files[0]; ev.target.value = ''; if (!f) return;
+  try {
+    const b = parseBackup(await f.text());
+    if (!confirm(`Se reemplazarán TODOS tus datos actuales por los de la copia${b.savedAt ? ' del ' + new Date(b.savedAt).toLocaleDateString('es') : ''}. ¿Seguir?`)) return;
+    localStorage.setItem(KEYS.agenda, JSON.stringify({ events: [], template: null, generated: [], fired: {}, snooze: {}, fs: 17, ...b.agenda }));
+    localStorage.setItem(KEYS.extras, JSON.stringify(b.extras));
+    location.reload();
+  } catch (e) { alert(e.message); }
 };
 
 drawRoutines(); drawSignals();
