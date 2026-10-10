@@ -14,6 +14,7 @@ Web para ayudar a personas autistas y con discapacidad a organizar su día. Esta
 - **Cómo llegar:** cada evento con lugar tiene un botón que abre el mapa con la ruta. Si guardaste la ubicación exacta, usa esa; si no, usa el texto del lugar.
 - **Ubicación del evento:** en el formulario, «Usar mi ubicación actual como lugar» guarda el punto exacto (por ejemplo, estando en el consultorio).
 - **Ver cuánto falta:** en «Qué pasa hoy», un botón calcula la distancia en línea recta y un tiempo aproximado a pie.
+- **Compartir mi ubicación con un familiar:** una guía paso a paso (WhatsApp, Google Maps, iPhone) para compartir en vivo con apps que ya existen. Asisazul no envía la ubicación a nadie.
 - **¿Dónde estoy?:** muestra tu posición, con enlace al mapa para copiar o compartir cuando tú quieras.
 
 ## Diseño y privacidad
