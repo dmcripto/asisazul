@@ -147,6 +147,7 @@ function init() {
   }
   $('liveRefresh').onclick = async () => { try { await refreshLinks(); watchRealtime(); } catch (e) { fail(e); } };
   setInterval(() => { if (Object.keys(places).length) drawMap(); }, 30000);
+  window.addEventListener('hashchange', () => { if (location.hash === '#live') setTimeout(drawMap, 60); });
 
   // ---------- Cuenta (correo y contraseña) ----------
   const email = () => $('liveEmail').value.trim();

@@ -40,7 +40,7 @@ function renderHello(evs) {
   const h = new Date().getHours();
   let name = '';
   try { name = (JSON.parse(localStorage.getItem('asisazul-extras-v1')).ficha.name || '').trim().split(/\s+/)[0]; } catch {}
-  $('hello').textContent = `${h < 6 ? 'Buenas noches' : h < 13 ? 'Buenos días' : h < 20 ? 'Buenas tardes' : 'Buenas noches'}${name ? ', ' + name : ''}`;
+  if (document.body.dataset.page === 'home') $('hello').textContent = `${h < 6 ? 'Buenas noches' : h < 13 ? 'Buenos días' : h < 20 ? 'Buenas tardes' : 'Buenas noches'}${name ? ', ' + name : ''}`;
   const hm = pad(new Date().getHours()) + ':' + pad(new Date().getMinutes());
   const next = evs.find((e) => e.time >= hm);
   const day = new Date().toLocaleDateString('es', { weekday: 'long', day: 'numeric', month: 'long' });

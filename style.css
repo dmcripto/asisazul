@@ -52,7 +52,6 @@ a{color:var(--main)}
 .tile:hover{border-color:var(--main)}
 .art{width:min(220px,60%);height:auto;display:block;margin:0 auto}
 .empty{text-align:center;color:var(--mute);padding:.4rem 0}.empty p{margin:.2rem 0 0}
-.empty svg{--h1:var(--h1);--h2:var(--h2);--h3:var(--h3)}
 
 /* ---- Tarjetas ---- */
 .bar{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin:.5rem 0}
@@ -116,3 +115,15 @@ dialog::backdrop{background:#0007}
 
 /* ---- Imprimir ---- */
 @media print{.hero,.tiles,.bar,#banner,.card:not(#pictos),#pictos>p,#pictos>h3 ~ .bar,dialog,.sos,#rutinas,#senales,#calma,#ayuda,#live,#whereCard{display:none!important}body{background:#fff;color:#000}.pbar{display:none}#pictos{box-shadow:none;border:0}}
+
+/* ---- Pantallas: cada sección se abre sola ---- */
+.pg-off{display:none!important}
+.hero.inner{padding-bottom:1.2rem}
+.hero.inner .scene,.hero.inner .hello-sub{display:none}
+.hero.inner .hero-actions button:not(.sos){display:none}
+.hero.inner h1{margin-top:.6rem}
+.back{position:relative;z-index:1;display:inline-flex;align-items:center;min-height:48px;margin-top:1rem;font-weight:800;background:rgba(255,255,255,.75);border-color:transparent;box-shadow:var(--shadow)}
+:root[data-theme=dark] .back{background:rgba(24,32,35,.6)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .back{background:rgba(24,32,35,.6)}}
+.back:not(.pg-off)+h1{margin-top:.6rem}
+.sub{font-size:1.1rem;margin:1.1rem 0 .3rem}

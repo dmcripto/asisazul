@@ -30,7 +30,8 @@
     <span class="brand"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="14" fill="var(--main)"/><circle cx="24" cy="24" r="10" fill="none" stroke="var(--main-ink)" stroke-width="3" opacity=".55"/><circle cx="24" cy="24" r="4.5" fill="var(--main-ink)"/></svg>Asisazul</span>
     <span class="hero-tools"><button id="txt" aria-label="Cambiar tamaño de texto">Aa</button><button id="theme">🌓 Tema: automático</button></span>
   </div>
-  <h1 id="hello">Hola</h1>
+  <button id="back" class="back pg-off" type="button">← Inicio</button>
+  <h1 id="hello" tabindex="-1">Hola</h1>
   <p id="helloSub" class="hello-sub"></p>
   <div class="hero-actions">
     <button id="sosOpen" class="sos"><svg class="ico sm a-sos" aria-hidden="true"><use href="#i-sos"/></svg>Necesito ayuda</button>
@@ -49,19 +50,19 @@
   </svg>
 </header>
 <main>
-  <nav class="tiles" aria-label="Secciones"><a class="tile" href="#hoy"><svg class="ico a-amber" aria-hidden="true"><use href="#i-hoy"/></svg><span>Hoy</span></a><a class="tile" href="#calendario"><svg class="ico a-teal" aria-hidden="true"><use href="#i-cal"/></svg><span>Calendario</span></a><a class="tile" href="#rutinas"><svg class="ico a-amber" aria-hidden="true"><use href="#i-rutinas"/></svg><span>Rutinas</span></a><a class="tile" href="#senales"><svg class="ico a-lav" aria-hidden="true"><use href="#i-senales"/></svg><span>Señales</span></a><a class="tile" href="#calma"><svg class="ico a-sky" aria-hidden="true"><use href="#i-calma"/></svg><span>Calma</span></a><a class="tile" href="#pictos"><svg class="ico a-rose" aria-hidden="true"><use href="#i-pictos"/></svg><span>Pictogramas</span></a><a class="tile" href="#live"><svg class="ico a-green" aria-hidden="true"><use href="#i-live"/></svg><span>Ubicación</span></a><a class="tile" href="#ayuda"><svg class="ico a-teal" aria-hidden="true"><use href="#i-ayuda"/></svg><span>Mi ficha</span></a></nav>
-  <div id="banner"></div>
+  <nav data-page="home" class="tiles" aria-label="Secciones"><a class="tile" href="#hoy"><svg class="ico a-amber" aria-hidden="true"><use href="#i-hoy"/></svg><span>Hoy</span></a><a class="tile" href="#calendario"><svg class="ico a-teal" aria-hidden="true"><use href="#i-cal"/></svg><span>Calendario</span></a><a class="tile" href="#rutinas"><svg class="ico a-amber" aria-hidden="true"><use href="#i-rutinas"/></svg><span>Rutinas</span></a><a class="tile" href="#senales"><svg class="ico a-lav" aria-hidden="true"><use href="#i-senales"/></svg><span>Señales</span></a><a class="tile" href="#calma"><svg class="ico a-sky" aria-hidden="true"><use href="#i-calma"/></svg><span>Calma</span></a><a class="tile" href="#pictos"><svg class="ico a-rose" aria-hidden="true"><use href="#i-pictos"/></svg><span>Pictogramas</span></a><a class="tile" href="#live"><svg class="ico a-green" aria-hidden="true"><use href="#i-live"/></svg><span>Ubicación</span></a><a class="tile" href="#ayuda"><svg class="ico a-teal" aria-hidden="true"><use href="#i-ayuda"/></svg><span>Mi ficha</span></a></nav>
+  <div id="banner" data-page="home"></div>
   <section class="card" id="whereCard" hidden aria-live="polite">
-    <h3 class="sh"><svg class="ico a-green" aria-hidden="true"><use href="#i-live"/></svg>¿Dónde estoy?</h3>
+    <h2 class="sh"><svg class="ico a-green" aria-hidden="true"><use href="#i-live"/></svg>¿Dónde estoy?</h2>
     <div id="whereInfo"></div>
     <div class="bar"><button id="whereCopy">Copiar enlace</button><button id="whereShare">Compartir</button><button id="whereClose">Cerrar</button></div>
     <small>Tu ubicación solo se usa en este momento y no se guarda ni se envía a ningún servidor. Si la compartes, decides tú con quién.</small>
   </section>
-  <section class="card" id="hoy" aria-labelledby="todayH">
+  <section data-page="hoy" class="card" id="hoy" aria-labelledby="todayH">
     <h2 id="todayH" class="sh"><svg class="ico a-amber" aria-hidden="true"><use href="#i-hoy"/></svg>Qué pasa hoy</h2>
     <div id="todayList"></div>
   </section>
-  <section class="card" id="calendario" aria-label="Calendario">
+  <section data-page="calendario" class="card" id="calendario" aria-label="Calendario">
   <div class="bar">
     <button id="prev" aria-label="Mes anterior">◀</button>
     <h2 id="title"></h2>
@@ -72,19 +73,19 @@
   <div class="grid" id="grid"></div>
   </section>
 
-  <section class="card">
+  <section data-page="calendario" class="card">
     <div class="bar"><h3 id="dayTitle" class="sh" style="margin:0 auto 0 0"></h3><button class="primary" id="add">＋ Agregar</button></div>
     <div id="list"></div>
   </section>
 
-  <section class="card">
-    <h3 class="sh"><svg class="ico a-teal" aria-hidden="true"><use href="#i-mes"/></svg>Completar el mes automáticamente</h3>
+  <section data-page="calendario" class="card">
+    <h2 class="sh"><svg class="ico a-teal" aria-hidden="true"><use href="#i-mes"/></svg>Completar el mes automáticamente</h2>
     <p>Cargá todas las terapias y turnos de <b id="tplName"></b> una sola vez y tocá el botón. Desde ese momento, cada mes nuevo se llena solo: cada evento se repite el mismo día de la semana (ej.: «2.º martes»).</p>
     <div class="bar"><button class="primary" id="tpl">Usar este mes como modelo</button><button id="regen">Volver a generar los meses siguientes</button><button id="notpl">Dejar de repetir</button></div>
     <p id="tplInfo"></p>
   </section>
-  <section class="card" id="pictos">
-    <h3 class="sh"><svg class="ico a-rose" aria-hidden="true"><use href="#i-pictos"/></svg>Frase en pictogramas</h3>
+  <section data-page="pictos" class="card" id="pictos">
+    <h2 class="sh"><svg class="ico a-rose" aria-hidden="true"><use href="#i-pictos"/></svg>Frase en pictogramas</h2>
     <p>Escribe una frase y cada palabra se muestra con su pictograma. Las palabras que escribes se envían a ARASAAC solo para buscar la imagen.</p>
     <div class="bar"><input id="pText" aria-label="Frase" placeholder="Ej.: yo camino al colegio" style="flex:1;min-width:12rem"><button class="primary" id="pGo">Mostrar</button></div>
     <div class="bar"><button id="pMic">🎙 Dictar</button><button id="pSpeak">🔊 Leer en voz alta</button><button id="pPrint">🖨 Imprimir o guardar PDF</button></div>
@@ -92,8 +93,8 @@
     <p id="pEmpty" style="color:var(--mute)">Todavía no hay frase.</p>
     <small>Pictogramas: <a href="https://arasaac.org">ARASAAC</a> (Gobierno de Aragón), autor Sergio Palao, licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es">CC BY-NC-SA</a>.</small>
   </section>
-  <section class="card" id="live">
-    <h3 class="sh"><svg class="ico a-green" aria-hidden="true"><use href="#i-live"/></svg>Ubicación en vivo</h3>
+  <section data-page="live" class="card" id="live">
+    <h2 class="sh"><svg class="ico a-green" aria-hidden="true"><use href="#i-live"/></svg>Ubicación en vivo</h2>
     <div id="liveSetup" hidden><p>Esta función todavía no está configurada. Falta conectar el servicio de Supabase (ver <b>supabase/README.md</b>).</p></div>
     <div id="liveAuth" hidden>
       <p>Para compartir o ver ubicaciones, entra con tu cuenta. Cada persona solo ve sus propios datos y los de quienes se vinculan con ella.</p>
@@ -113,13 +114,13 @@
     <div id="liveMain" hidden>
       <p>Sesión de <b id="liveWho"></b> <button id="liveOut">Cerrar sesión</button></p>
       <p>Tú decides si compartes, con quién y por cuánto tiempo. Solo se guarda tu última posición, y se borra al parar.</p>
-      <h4>Compartir mi ubicación</h4>
+      <h3 class="sub">Compartir mi ubicación</h3>
       <p id="liveState" aria-live="polite"></p>
       <div class="bar"><label for="liveDur" id="liveDurL" style="margin:0">Durante</label><select id="liveDur" style="width:auto"></select><button id="liveToggle" class="toggle" role="switch" aria-checked="false" aria-label="Compartir mi ubicación en tiempo real"><span class="knob"></span><span id="liveToggleTxt">Apagado</span></button></div>
       <p><b>Familiares que me ven</b></p><div id="liveFollowers"></div>
       <div class="bar"><button id="liveCode">🔑 Crear código para un familiar</button><b id="liveCodeOut" style="font-size:1.6rem;letter-spacing:.2em"></b></div>
       <small id="liveCodeNote"></small>
-      <h4>Ver a un familiar</h4>
+      <h3 class="sub">Ver a un familiar</h3>
       <div class="bar"><input id="liveCodeIn" aria-label="Código del familiar" placeholder="Código de 6 letras o números" maxlength="8" autocapitalize="characters" style="flex:1;min-width:12rem"><button id="liveRedeem">Vincular</button></div>
       <p><b>Personas que veo</b></p><div id="liveWatching"></div>
       <div class="bar"><button id="liveRefresh">🔄 Actualizar</button></div>
@@ -127,8 +128,8 @@
       <div id="liveMapBox" hidden><div id="livePlaces"></div><div id="liveMap" role="img" aria-label="Mapa con la ubicación de tus familiares"></div></div>
     </div>
   </section>
-  <section class="card" id="rutinas">
-    <h3 class="sh"><svg class="ico a-amber" aria-hidden="true"><use href="#i-rutinas"/></svg>Rutinas paso a paso</h3>
+  <section data-page="rutinas" class="card" id="rutinas">
+    <h2 class="sh"><svg class="ico a-amber" aria-hidden="true"><use href="#i-rutinas"/></svg>Rutinas paso a paso</h2>
     <p>Toca cada paso cuando lo termines. El avance se reinicia solo cada día.</p>
     <div id="rList"></div>
     <details><summary>Crear una rutina</summary>
@@ -139,8 +140,8 @@
     <p><small>O empieza con un ejemplo:</small></p><div class="bar" id="rExamples"></div>
   </section>
 
-  <section class="card" id="senales">
-    <h3 class="sh"><svg class="ico a-lav" aria-hidden="true"><use href="#i-senales"/></svg>Registro de señales</h3>
+  <section data-page="senales" class="card" id="senales">
+    <h2 class="sh"><svg class="ico a-lav" aria-hidden="true"><use href="#i-senales"/></svg>Registro de señales</h2>
     <p>Anota cómo estás. Sirve para notar patrones y contárselo a tu terapeuta. Queda solo en tu teléfono.</p>
     <fieldset class="fs"><legend>¿Cómo te sientes?</legend><div class="bar" id="sMood"></div></fieldset>
     <label for="sOver">Sobrecarga sensorial</label><select id="sOver"></select>
@@ -148,20 +149,20 @@
     <fieldset class="fs"><legend>¿Qué lo provocó?</legend><div class="checks" id="sTrig"></div></fieldset>
     <label for="sNote">Nota (opcional)</label><textarea id="sNote" rows="2" maxlength="500"></textarea>
     <div class="bar"><button class="primary" id="sSave">Guardar registro</button></div>
-    <h4>Últimos 7 días</h4><p id="sSum" aria-live="polite"></p><div id="sList"></div>
+    <h3 class="sub">Últimos 7 días</h3><p id="sSum" aria-live="polite"></p><div id="sList"></div>
     <div class="bar"><button id="sCsv">⬇ Exportar para el terapeuta (.csv)</button><button id="sClear">Borrar todos los registros</button></div>
   </section>
 
-  <section class="card" id="calma">
-    <h3 class="sh"><svg class="ico a-sky" aria-hidden="true"><use href="#i-calma"/></svg>Calma</h3>
+  <section data-page="calma" class="card" id="calma">
+    <h2 class="sh"><svg class="ico a-sky" aria-hidden="true"><use href="#i-calma"/></svg>Calma</h2>
     <p>Respira despacio siguiendo el texto. Para cuando todo se siente demasiado.</p>
     <div class="breath"><div id="bCircle" aria-hidden="true"></div><div id="bText" aria-live="polite" class="big">Listo cuando quieras</div></div>
     <div class="bar"><button class="primary" id="bGo">▶ Empezar a respirar</button></div>
     <details><summary>Ejercicio 5-4-3-2-1</summary><ol id="gList"></ol></details>
   </section>
 
-  <section class="card" id="ayuda">
-    <h3 class="sh"><svg class="ico a-teal" aria-hidden="true"><use href="#i-ayuda"/></svg>Mi ficha y contactos de ayuda</h3>
+  <section data-page="ayuda" class="card" id="ayuda">
+    <h2 class="sh"><svg class="ico a-teal" aria-hidden="true"><use href="#i-ayuda"/></svg>Mi ficha y contactos de ayuda</h2>
     <p>Esto se muestra al tocar <b>🆘 Necesito ayuda</b>, para que otra persona sepa cómo ayudarte. Queda solo en tu teléfono.</p>
     <label for="fiName">Mi nombre</label><input id="fiName" maxlength="60" autocomplete="name">
     <label for="fiAbout">Lo que debes saber de mí</label><textarea id="fiAbout" rows="2" maxlength="300" placeholder="Ej.: Soy autista. Puedo no poder hablar si estoy muy nervioso."></textarea>
@@ -169,8 +170,8 @@
     <label for="fiMeds">Medicación</label><input id="fiMeds" maxlength="200">
     <label for="fiHow">Cómo ayudarme</label><textarea id="fiHow" rows="2" maxlength="300" placeholder="Ej.: Habla despacio y bajo. No me toques sin avisar."></textarea>
     <label for="fiEmer">Número de emergencias de tu país</label><input id="fiEmer" inputmode="tel" maxlength="20" placeholder="Ej.: 911 (Argentina)">
-    <h4>Contactos de confianza</h4><div id="fiContacts"></div>
-    <h4>Copia de seguridad</h4>
+    <h3 class="sub">Contactos de confianza</h3><div id="fiContacts"></div>
+    <h3 class="sub">Copia de seguridad</h3>
     <p>Guarda todos tus datos (agenda, ficha, rutinas y registros) en un archivo, por si cambias de teléfono o borras la app. <b>El archivo tiene datos de salud: guárdalo en un lugar privado.</b></p>
     <div class="bar"><button id="bkSave">💾 Guardar copia</button><button id="bkLoad">📂 Restaurar copia</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div>
   </section>
@@ -215,6 +216,7 @@
 </dialog>
 <script src="vendor/supabase.js"></script>
 <script src="vendor/leaflet.js"></script>
+<script type="module" src="router.js"></script>
 <script type="module" src="app.js"></script>
 <script type="module" src="live.js"></script>
 <script type="module" src="extras-ui.js"></script>
