@@ -28,3 +28,23 @@ describe('agenda-tea', () => {
     expect(toICS([{ id: 'a', title: 'X', date: '2026-03-10', time: '10:00', remind: [30] }])).toContain('TRIGGER:-PT30M');
   });
 });
+
+import { tokenize, searchUrl, imageUrl, ids, nextAlt } from '../pictos.js';
+describe('pictogramas', () => {
+  it('separa la frase en palabras', () => {
+    expect(tokenize('Yo camino al colegio.')).toEqual(['yo', 'camino', 'al', 'colegio']);
+    expect(tokenize('  ')).toEqual([]);
+  });
+  it('arma las URLs de ARASAAC', () => {
+    expect(searchUrl('niño')).toBe('https://api.arasaac.org/v1/pictograms/es/search/ni%C3%B1o');
+    expect(imageUrl(6009)).toBe('https://static.arasaac.org/pictograms/6009/6009_500.png');
+  });
+  it('toma solo ids válidos de la respuesta', () => {
+    expect(ids([{ _id: 5 }, { x: 1 }, { _id: 7 }])).toEqual([5, 7]);
+    expect(ids(null)).toEqual([]);
+  });
+  it('rota entre alternativas', () => {
+    expect(nextAlt({ alts: [1, 2], i: 1 }).i).toBe(0);
+    expect(nextAlt({ alts: [], i: 0 }).i).toBe(0);
+  });
+});

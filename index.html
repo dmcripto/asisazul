@@ -37,6 +37,15 @@
     <div class="bar"><button class="primary" id="tpl">Usar este mes como modelo</button><button id="regen">Volver a generar los meses siguientes</button><button id="notpl">Dejar de repetir</button></div>
     <p id="tplInfo"></p>
   </section>
+  <section class="card" id="pictos">
+    <h3 style="margin-top:0">Frase en pictogramas</h3>
+    <p>Escribe una frase y cada palabra se muestra con su pictograma. Las palabras que escribes se envían a ARASAAC solo para buscar la imagen.</p>
+    <div class="bar"><input id="pText" aria-label="Frase" placeholder="Ej.: yo camino al colegio" style="flex:1;min-width:12rem"><button class="primary" id="pGo">Mostrar</button></div>
+    <div class="bar"><button id="pMic">🎙 Dictar</button><button id="pSpeak">🔊 Leer en voz alta</button><button id="pPrint">🖨 Imprimir o guardar PDF</button></div>
+    <div id="pList" class="plist"></div>
+    <p id="pEmpty" style="color:var(--mute)">Todavía no hay frase.</p>
+    <small>Pictogramas: <a href="https://arasaac.org">ARASAAC</a> (Gobierno de Aragón), autor Sergio Palao, licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es">CC BY-NC-SA</a>.</small>
+  </section>
 </main>
 
 <dialog id="form">
@@ -67,5 +76,6 @@
   <div class="bar" style="justify-content:center"><button class="primary" id="aOk">Entendido</button><button id="aSnooze">Avisarme en 5 min</button></div>
 </dialog>
 <script type="module" src="app.js"></script>
+<script type="module" src="pictos-ui.js"></script>
 </body>
 </html>

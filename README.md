@@ -8,6 +8,7 @@ Web para ayudar a personas autistas y con discapacidad a organizar su día. Esta
 - **Recordatorios con alarmas** para terapias y turnos médicos. Cada evento puede avisar 1 día, 2 h, 1 h, 30 min o 10 min antes, o a la hora. La alarma muestra una pantalla grande con sonido suave y vibración, y se puede posponer 5 minutos.
 - **Relleno automático de meses:** se carga un mes una vez y se toca «Usar este mes como modelo». Los meses siguientes se completan solos, repitiendo cada evento el mismo día de la semana (por ejemplo, «2.º martes»). Si no existe el 5.º día de la semana, se usa el último. Los eventos automáticos se pueden editar o borrar. «Volver a generar» no toca los que cargaste a mano.
 - **Exportar a .ics:** crea un archivo con alarmas (VALARM) para el calendario del teléfono. Así suenan aunque la web esté cerrada.
+- **Frase en pictogramas:** se escribe (o se dicta) una frase y cada palabra se muestra con su pictograma. Se puede cambiar la imagen de una palabra (↻), quitarla (✕), leer la frase en voz alta e imprimir o guardar en PDF.
 
 ## Diseño y privacidad
 
@@ -15,6 +16,7 @@ Web para ayudar a personas autistas y con discapacidad a organizar su día. Esta
 - Texto ajustable con el botón **Aa**.
 - Modo oscuro automático, según la configuración del dispositivo.
 - Botones grandes.
+- **Pictogramas:** para buscar la imagen, cada palabra escrita se envía a la API pública de ARASAAC. El dictado por voz es opcional y avisa antes: según el navegador, el audio puede ir a un servidor externo.
 - **Los datos de salud son privados:** se guardan solo en tu navegador (`localStorage`). No se envían a ningún servidor.
 
 ## Cómo probarla
@@ -43,6 +45,8 @@ Las pruebas (vitest) cubren la lógica pura de `logic.js`: repetir el día de la
 | `index.html` | Página principal |
 | `app.js` | Interfaz y alarmas |
 | `logic.js` | Lógica pura, sin DOM |
+| `pictos.js` | Lógica pura de pictogramas |
+| `pictos-ui.js` | Pantalla de pictogramas |
 | `style.css` | Estilos |
 | `tests/agenda-tea.test.ts` | Pruebas |
 
@@ -52,3 +56,7 @@ Las pruebas (vitest) cubren la lógica pura de `logic.js`: repetir el día de la
 - Compartir la agenda con familiares o cuidadores.
 - Pictogramas y vista «qué pasa hoy» paso a paso.
 - Registro de señales (sobrecarga sensorial, ánimo, crisis) y regulación emocional.
+
+## Créditos
+
+Pictogramas de [ARASAAC](https://arasaac.org) (Gobierno de Aragón), autor Sergio Palao, licencia [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es). No se pueden usar con fines comerciales.

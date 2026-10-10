@@ -30,3 +30,9 @@ dialog{border:0;border-radius:14px;padding:1.2rem;max-width:480px;width:92%;back
 dialog::backdrop{background:#0006}
 #alarm{text-align:center;border:4px solid var(--warn)}#alarm h2{font-size:1.6rem}
 @media(max-width:600px){.day{min-height:60px}.chip{font-size:.62rem}}
+.plist{display:flex;flex-wrap:wrap;gap:.6rem;margin:.6rem 0}
+.pcard{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:.5rem;width:9rem;text-align:center}
+.pcard img,.pnone{width:100%;aspect-ratio:1;object-fit:contain;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:.85rem}
+.pcard b{display:block;margin:.3rem 0}.pbar{display:flex;gap:.3rem;justify-content:center}.pbar button{min-height:36px;padding:.2rem .6rem}
+a{color:var(--main)}
+@media print{header,.bar,#banner,.card:not(#pictos),#pictos>p,#pictos>h3 ~ .bar,dialog{display:none!important}body{background:#fff;color:#000}.pbar{display:none}}
