@@ -11,6 +11,10 @@ Web para ayudar a personas autistas y con discapacidad a organizar su día. Esta
 - **Frase en pictogramas:** se escribe (o se dicta) una frase y cada palabra se muestra con su pictograma. Se puede cambiar la imagen de una palabra (↻), quitarla (✕), leer la frase en voz alta e imprimir o guardar en PDF.
 - **Qué pasa hoy:** el día en orden, con letra grande, pictograma, hora, lugar y notas. Marca qué ya pasó y qué sigue.
 - **Pictograma en cada evento:** al crear un evento puedes escribir una palabra (por ejemplo «psicólogo») y se le asigna su pictograma.
+- **Cómo llegar:** cada evento con lugar tiene un botón que abre el mapa con la ruta. Si guardaste la ubicación exacta, usa esa; si no, usa el texto del lugar.
+- **Ubicación del evento:** en el formulario, «Usar mi ubicación actual como lugar» guarda el punto exacto (por ejemplo, estando en el consultorio).
+- **Ver cuánto falta:** en «Qué pasa hoy», un botón calcula la distancia en línea recta y un tiempo aproximado a pie.
+- **¿Dónde estoy?:** muestra tu posición, con enlace al mapa para copiar o compartir cuando tú quieras.
 
 ## Diseño y privacidad
 
@@ -19,6 +23,7 @@ Web para ayudar a personas autistas y con discapacidad a organizar su día. Esta
 - Modo oscuro: automático según el dispositivo, o elegido a mano con el botón **Tema** (automático, claro u oscuro).
 - Botones grandes.
 - **Pictogramas:** para buscar la imagen, cada palabra escrita se envía a la API pública de ARASAAC. El dictado por voz es opcional y avisa antes: según el navegador, el audio puede ir a un servidor externo.
+- **Ubicación:** solo se pide al tocar un botón, con aviso antes. No se envía a ningún servidor. Solo se guarda la ubicación que elijas para un evento, y queda en tu navegador.
 - **Los datos de salud son privados:** se guardan solo en tu navegador (`localStorage`). No se envían a ningún servidor.
 
 ## Cómo probarla
@@ -47,6 +52,7 @@ Las pruebas (vitest) cubren la lógica pura de `logic.js`: repetir el día de la
 | `index.html` | Página principal |
 | `app.js` | Interfaz y alarmas |
 | `logic.js` | Lógica pura, sin DOM |
+| `geo.js` | Distancias y enlaces de mapa (lógica pura) |
 | `pictos.js` | Lógica pura de pictogramas |
 | `pictos-api.js` | Búsqueda en ARASAAC con caché local |
 | `pictos-ui.js` | Pantalla de pictogramas |
@@ -55,6 +61,8 @@ Las pruebas (vitest) cubren la lógica pura de `logic.js`: repetir el día de la
 
 ## Pendiente
 
+- Aviso de «es hora de salir» según la ruta y el tráfico, y seguimiento con la pantalla apagada (requiere la app de Android).
+- Ubicación en vivo para familiares o cuidadores: necesita servidor, cuenta y consentimiento explícito. Se hará junto con «compartir agenda».
 - Alarmas en segundo plano en Android.
 - Compartir la agenda con familiares o cuidadores.
 - Registro de señales (sobrecarga sensorial, ánimo, crisis) y regulación emocional.

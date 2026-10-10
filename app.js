@@ -1,3 +1,4 @@
+import { distanceKm, describeDistance, directionsUrl, mapUrl, shareText } from './geo.js';
 import { lookup } from './pictos-api.js';
 import { imageUrl } from './pictos.js';
 import { pad, monthKey, daysIn, iso, parseISO, addMonth, autoFill, dueAlarms, toICS } from './logic.js';
@@ -12,7 +13,10 @@ const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } c
 const now0 = new Date();
 let view = { y: now0.getFullYear(), m: now0.getMonth() };
 let sel = iso(now0.getFullYear(), now0.getMonth(), now0.getDate());
-let editing = null;
+let editing = null, formGeo = null;
+const geoInfo = () => { $('fGeoInfo').textContent = formGeo ? '✔ Ubicación guardada' : ''; $('fGeo').textContent = formGeo ? '✕ Quitar ubicación guardada' : '📍 Usar mi ubicación actual como lugar'; };
+const getPos = () => new Promise((ok, no) => navigator.geolocation ? navigator.geolocation.getCurrentPosition((p) => ok({ lat: p.coords.latitude, lon: p.coords.longitude, acc: Math.round(p.coords.accuracy) }), no, { enableHighAccuracy: true, timeout: 15000 }) : no(new Error('sin GPS')));
+const geoErr = () => alert('No pude obtener tu ubicación. Revisa que el permiso esté activado y que el GPS esté encendido.');
 
 document.documentElement.style.setProperty('--fs', state.fs + 'px');
 const THEMES = [['auto', 'automático'], ['light', 'claro'], ['dark', 'oscuro']];
@@ -28,6 +32,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<'
 const evOn = (d) => state.events.filter((e) => e.date === d).sort((a, b) => a.time.localeCompare(b.time));
 
 const pic = (e) => e.picto ? `<img class="eimg" src="${imageUrl(e.picto)}" alt="" loading="lazy">` : '';
+const way = (e) => { const u = directionsUrl(e); return u ? `<a class="btnlink" href="${u}" target="_blank" rel="noopener">🧭 Cómo llegar</a>` : ''; };
 const lead = (m) => m === 0 ? 'a la hora' : m >= 60 ? m / 60 + ' h antes' : m + ' min antes';
 
 function renderToday() {
@@ -37,7 +42,7 @@ function renderToday() {
   $('todayList').innerHTML = evs.map((e, i) => {
     const cls = e.time < hm ? 'past' : i === nextI ? 'now' : '';
     const tag = e.time < hm ? 'Ya pasó' : i === nextI ? 'Sigue' : 'Después';
-    return `<div class="step ${cls}">${e.picto ? `<img src="${imageUrl(e.picto)}" alt="" loading="lazy">` : ''}<div><span class="tag">${tag}</span><div class="big">${e.time} · ${esc(e.title)}</div>${e.place ? `<div>📍 ${esc(e.place)}</div>` : ''}${e.notes ? `<div>📝 ${esc(e.notes)}</div>` : ''}</div></div>`;
+    return `<div class="step ${cls}">${e.picto ? `<img src="${imageUrl(e.picto)}" alt="" loading="lazy">` : ''}<div><span class="tag">${tag}</span><div class="big">${e.time} · ${esc(e.title)}</div>${e.place ? `<div>📍 ${esc(e.place)}</div>` : ''}<div class="bar">${way(e)}${Number.isFinite(e.lat) ? `<button data-dist="${esc(e.id)}">📏 Ver cuánto falta</button>` : ''}</div><div class="distOut" id="dist-${esc(e.id)}"></div>${e.notes ? `<div>📝 ${esc(e.notes)}</div>` : ''}</div></div>`;
   }).join('') || '<p style="color:var(--mute)">Hoy no hay nada en la agenda. Día libre.</p>';
 }
 
@@ -56,7 +61,7 @@ function render() {
   $('grid').innerHTML = html;
   const p = parseISO(sel);
   $('dayTitle').textContent = `${p.d} de ${MONTHS[p.m]}`;
-  $('list').innerHTML = evOn(sel).map((e) => `<div class="item"><div><span class="chip t-${e.type}" style="display:inline-block;font-size:.85rem">${e.time}</span> ${pic(e)}<b>${esc(e.title)}</b>${e.auto ? ' <small>(automático)</small>' : ''}<br><small>${esc(e.place)} ${esc(e.notes)}</small><br><small>🔔 ${(e.remind || []).map(lead).join(', ') || 'sin alarma'}</small></div><div><button data-edit="${esc(e.id)}">Editar</button> <button data-del="${esc(e.id)}" aria-label="Borrar">🗑</button></div></div>`).join('') || '<p style="color:var(--mute)">Nada este día.</p>';
+  $('list').innerHTML = evOn(sel).map((e) => `<div class="item"><div><span class="chip t-${e.type}" style="display:inline-block;font-size:.85rem">${e.time}</span> ${pic(e)}<b>${esc(e.title)}</b>${e.auto ? ' <small>(automático)</small>' : ''}<br><small>${esc(e.place)} ${esc(e.notes)}</small><br>${way(e)}<br><small>🔔 ${(e.remind || []).map(lead).join(', ') || 'sin alarma'}</small></div><div><button data-edit="${esc(e.id)}">Editar</button> <button data-del="${esc(e.id)}" aria-label="Borrar">🗑</button></div></div>`).join('') || '<p style="color:var(--mute)">Nada este día.</p>';
   const k = monthKey(view.y, view.m);
   $('tplName').textContent = `${MONTHS[view.m]} ${view.y}`;
   const t = state.template;
@@ -74,6 +79,7 @@ $('txt').onclick = () => { state.fs = state.fs >= 24 ? 15 : state.fs + 3; docume
 
 function openForm(ev) {
   editing = ev || null;
+  formGeo = Number.isFinite(ev?.lat) ? { lat: ev.lat, lon: ev.lon } : null; geoInfo();
   $('fTitle').textContent = ev ? 'Editar evento' : 'Nuevo evento';
   $('fName').value = ev?.title || ''; $('fType').value = ev?.type || 'terapia';
   $('fDate').value = ev?.date || sel; $('fTime').value = ev?.time || '10:00';
@@ -82,6 +88,11 @@ function openForm(ev) {
   document.querySelectorAll('#fRemind input').forEach((c) => { c.checked = r.includes(Number(c.value)); });
   $('form').showModal();
 }
+$('fGeo').onclick = async () => {
+  if (formGeo) { formGeo = null; geoInfo(); return; }
+  if (!confirm('Se usará tu ubicación actual como lugar de este evento. Se guarda solo en este dispositivo. ¿Continuar?')) return;
+  try { const p = await getPos(); formGeo = { lat: p.lat, lon: p.lon }; geoInfo(); } catch { geoErr(); }
+};
 $('add').onclick = () => openForm();
 $('list').onclick = (e) => {
   const ed = e.target.closest('[data-edit]'), del = e.target.closest('[data-del]');
@@ -93,6 +104,7 @@ $('f').onsubmit = (e) => {
   const data = {
     title: $('fName').value.trim(), type: $('fType').value, date: $('fDate').value, time: $('fTime').value,
     pictoWord: $('fPicto').value.trim().toLowerCase(), place: $('fPlace').value.trim(), notes: $('fNotes').value.trim(),
+    lat: formGeo ? formGeo.lat : null, lon: formGeo ? formGeo.lon : null,
     remind: [...document.querySelectorAll('#fRemind input:checked')].map((c) => Number(c.value)).sort((a, b) => b - a),
   };
   let ev = editing;
@@ -171,3 +183,22 @@ function tick() {
 if (autoFill(state, new Date()).length) save();
 render(); tick(); setInterval(tick, 15000); setInterval(renderToday, 60000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { if (autoFill(state, new Date()).length) { save(); render(); } tick(); } });
+
+// ---- Ubicación (solo cuando se toca el botón) ----
+let here = null;
+$('where').onclick = async () => {
+  if (!confirm('Se pedirá tu ubicación una sola vez, ahora. No se guarda ni se envía a ningún servidor. ¿Continuar?')) return;
+  try {
+    here = await getPos();
+    $('whereInfo').innerHTML = `<p>Latitud ${here.lat.toFixed(5)}, longitud ${here.lon.toFixed(5)} (precisión ~${here.acc} m)</p><p><a href="${mapUrl(here)}" target="_blank" rel="noopener">Ver en el mapa</a></p>`;
+    $('whereCard').hidden = false; $('whereCard').scrollIntoView({ block: 'nearest' });
+  } catch { geoErr(); }
+};
+$('whereClose').onclick = () => { here = null; $('whereCard').hidden = true; };
+$('whereCopy').onclick = async () => { try { await navigator.clipboard.writeText(shareText(here)); alert('Enlace copiado.'); } catch { prompt('Copia este enlace:', shareText(here)); } };
+$('whereShare').onclick = () => { if (navigator.share) navigator.share({ text: shareText(here) }).catch(() => {}); else $('whereCopy').click(); };
+$('todayList').onclick = async (e) => {
+  const b = e.target.closest('[data-dist]'); if (!b) return;
+  const ev = state.events.find((x) => x.id === b.dataset.dist);
+  try { const p = await getPos(); $('dist-' + b.dataset.dist).textContent = describeDistance(distanceKm(p, ev)); } catch { geoErr(); }
+};

@@ -14,11 +14,18 @@
     <button id="txt" aria-label="Cambiar tamaño de texto">Aa</button>
     <button id="theme" aria-label="Cambiar tema">🌓 Tema: automático</button>
     <button id="sound">🔔 Activar alarmas</button>
+    <button id="where">📍 ¿Dónde estoy?</button>
     <button id="ics">⬇ Exportar al teléfono (.ics)</button>
   </div>
 </header>
 <main>
   <div id="banner"></div>
+  <section class="card" id="whereCard" hidden aria-live="polite">
+    <h3 style="margin-top:0">¿Dónde estoy?</h3>
+    <div id="whereInfo"></div>
+    <div class="bar"><button id="whereCopy">Copiar enlace</button><button id="whereShare">Compartir</button><button id="whereClose">Cerrar</button></div>
+    <small>Tu ubicación solo se usa en este momento y no se guarda ni se envía a ningún servidor. Si la compartes, decides tú con quién.</small>
+  </section>
   <section class="card" id="today" aria-labelledby="todayH">
     <h2 id="todayH" style="margin-top:0">Qué pasa hoy</h2>
     <div id="todayList"></div>
@@ -64,6 +71,7 @@
     <label for="fTime">Hora</label><input id="fTime" type="time" required>
     <label for="fPicto">Pictograma (una palabra, opcional)</label><input id="fPicto" placeholder="Ej.: colegio, médico, psicólogo">
     <label for="fPlace">Lugar</label><input id="fPlace" placeholder="Ej.: Consultorio, calle…">
+    <div class="bar"><button type="button" id="fGeo">📍 Usar mi ubicación actual como lugar</button><span id="fGeoInfo"></span></div>
     <label for="fNotes">Notas (qué llevar, con quién…)</label><textarea id="fNotes" rows="2"></textarea>
     <label>Alarmas (antes del evento)</label>
     <div class="checks" id="fRemind">

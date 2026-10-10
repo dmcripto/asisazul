@@ -48,3 +48,25 @@ describe('pictogramas', () => {
     expect(nextAlt({ alts: [], i: 0 }).i).toBe(0);
   });
 });
+
+import { distanceKm, describeDistance, directionsUrl, mapUrl, shareText } from '../geo.js';
+describe('ubicación', () => {
+  it('calcula la distancia en línea recta', () => {
+    expect(distanceKm({ lat: 0, lon: 0 }, { lat: 0, lon: 0 })).toBe(0);
+    expect(distanceKm({ lat: -34.6037, lon: -58.3816 }, { lat: -34.6137, lon: -58.3816 })).toBeCloseTo(1.11, 1);
+  });
+  it('describe la distancia con claridad', () => {
+    expect(describeDistance(0.45)).toContain('450 m');
+    expect(describeDistance(2.25)).toContain('2,3 km');
+    expect(describeDistance(2.25)).toContain('a pie');
+  });
+  it('arma el enlace Cómo llegar', () => {
+    expect(directionsUrl({ lat: -34.6, lon: -58.38 })).toContain('destination=-34.6%2C-58.38');
+    expect(directionsUrl({ place: 'Av. Siempre Viva 742' })).toContain('destination=Av.%20Siempre%20Viva%20742');
+    expect(directionsUrl({ place: '  ' })).toBeNull();
+  });
+  it('arma el enlace de mapa para compartir', () => {
+    expect(mapUrl({ lat: 1, lon: 2 })).toContain('mlat=1&mlon=2');
+    expect(shareText({ lat: 1, lon: 2 })).toMatch(/^Estoy aquí: https:/);
+  });
+});
