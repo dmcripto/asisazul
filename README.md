@@ -21,6 +21,7 @@ Web para ayudar a personas autistas y con discapacidad a organizar su día. Esta
 
 - Interfaz calmada, con colores suaves y sin movimiento brusco. Respeta la opción del sistema «reducir movimiento».
 - Texto ajustable con el botón **Aa**.
+- Revisada con axe-core (accesibilidad): sin errores de contraste ni de nombres de botones, en claro y oscuro.
 - Modo oscuro: automático según el dispositivo, o elegido a mano con el botón **Tema** (automático, claro u oscuro).
 - Botones grandes.
 - **Pictogramas:** para buscar la imagen, cada palabra escrita se envía a la API pública de ARASAAC. El dictado por voz es opcional y avisa antes: según el navegador, el audio puede ir a un servidor externo.
