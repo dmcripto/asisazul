@@ -14,6 +14,7 @@ Web para ayudar a personas autistas y con discapacidad a organizar su día. Esta
 - **Cómo llegar:** cada evento con lugar tiene un botón que abre el mapa con la ruta. Si guardaste la ubicación exacta, usa esa; si no, usa el texto del lugar.
 - **Ubicación del evento:** en el formulario, «Usar mi ubicación actual como lugar» guarda el punto exacto (por ejemplo, estando en el consultorio).
 - **Ver cuánto falta:** en «Qué pasa hoy», un botón calcula la distancia en línea recta y un tiempo aproximado a pie.
+- **Ubicación en vivo (propia):** compartir la ubicación en tiempo real con familiares vinculados por un código, con duración limitada y mapa dentro de la app. Usa Supabase; ver `supabase/README.md` para activarlo. Hasta que se configure, no envía nada.
 - **Compartir mi ubicación con un familiar:** una guía paso a paso (WhatsApp, Google Maps, iPhone) para compartir en vivo con apps que ya existen. Asisazul no envía la ubicación a nadie.
 - **¿Dónde estoy?:** muestra tu posición, con enlace al mapa para copiar o compartir cuando tú quieras.
 
@@ -75,6 +76,9 @@ Las pruebas (vitest) cubren la lógica pura de `logic.js`: repetir el día de la
 | `pictos.js` | Lógica pura de pictogramas |
 | `pictos-api.js` | Búsqueda en ARASAAC con caché local |
 | `pictos-ui.js` | Pantalla de pictogramas |
+| `live.js`, `share.js`, `config.js` | Ubicación en vivo (Supabase) |
+| `supabase/` | Tablas, reglas de seguridad y guía de puesta en marcha |
+| `vendor/` | Supabase y Leaflet (mapa), incluidos para que funcionen sin internet de CDN |
 | `native.js` | Alarmas nativas de Android |
 | `capacitor.config.json`, `android/` | Proyecto de la app de Android |
 | `scripts/build-web.mjs` | Copia la web a `www/` |
@@ -84,7 +88,8 @@ Las pruebas (vitest) cubren la lógica pura de `logic.js`: repetir el día de la
 ## Pendiente
 
 - Aviso de «es hora de salir» según la ruta y el tráfico, y seguimiento con la pantalla apagada (requiere la app de Android).
-- Ubicación en vivo para familiares o cuidadores: necesita servidor, cuenta y consentimiento explícito. Se hará junto con «compartir agenda».
+- Probar la ubicación en vivo con un proyecto real de Supabase y dos teléfonos; añadir límite de intentos de códigos antes de abrirla al público.
+- Compartir la agenda con familiares o cuidadores.
 - Probar el APK en un teléfono real; posponer 5 min en las alarmas nativas.
 - Compartir la agenda con familiares o cuidadores.
 - Registro de señales (sobrecarga sensorial, ánimo, crisis) y regulación emocional.

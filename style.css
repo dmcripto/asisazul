@@ -47,3 +47,5 @@ a{color:var(--main)}
 @media print{#whereCard{display:none!important}}
 details{border:1px solid var(--line);border-radius:10px;padding:.5rem .8rem;margin:.4rem 0}summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center}details ol{margin:.2rem 0 .5rem;padding-left:1.3rem}details li{margin:.3rem 0}
 @media print{#shareGuide{display:none!important}}
+#liveMap{height:320px;border-radius:12px;margin-top:.5rem}h4{margin:1rem 0 .3rem}
+@media print{#live{display:none!important}}

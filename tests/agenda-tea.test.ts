@@ -87,3 +87,29 @@ describe('alarmas del sistema', () => {
     expect(planAlarms(ev, now, 90, 2)).toHaveLength(2);
   });
 });
+
+import { normalizeCode, validCode, expiresAt, ago, isStale, shouldSend } from '../share.js';
+describe('ubicación en vivo', () => {
+  it('valida el código de vinculación', () => {
+    expect(normalizeCode(' ab-c23 x ')).toBe('ABC23X');
+    expect(validCode('abc23x')).toBe(true);
+    expect(validCode('ABC0O1')).toBe(false); // letras confusas no existen en los códigos
+    expect(validCode('ABC23')).toBe(false);
+  });
+  it('calcula el vencimiento y la antigüedad', () => {
+    const now = Date.UTC(2026, 0, 1, 10, 0, 0);
+    expect(expiresAt(now, 60)).toBe('2026-01-01T11:00:00.000Z');
+    expect(ago('2026-01-01T09:59:30.000Z', now)).toBe('Hace 30 s');
+    expect(ago('2026-01-01T09:55:00.000Z', now)).toBe('Hace 5 min');
+    expect(ago('2026-01-01T08:00:00.000Z', now)).toBe('Hace 2 h');
+    expect(isStale('2026-01-01T09:40:00.000Z', now)).toBe(true);
+    expect(isStale('2026-01-01T09:55:00.000Z', now)).toBe(false);
+  });
+  it('envía solo si se movió o pasó tiempo', () => {
+    const a = { lat: -34.6, lon: -58.38, t: 0 };
+    expect(shouldSend(null, a)).toBe(true);
+    expect(shouldSend(a, { ...a, t: 5000 })).toBe(false);
+    expect(shouldSend(a, { ...a, t: 31000 })).toBe(true);
+    expect(shouldSend(a, { lat: -34.601, lon: -58.38, t: 5000 })).toBe(true); // ~111 m
+  });
+});
