@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <defs>
+    <linearGradient id="fondo" x1="4" y1="2" x2="44" y2="46" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#6cb7ea"/><stop offset="1" stop-color="#2c7a86"/></linearGradient>
+    <linearGradient id="lazo" x1="8" y1="0" x2="40" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#ffffff"/><stop offset="1" stop-color="#ffe2b0"/></linearGradient>
+  </defs>
+  <rect width="48" height="48" rx="14" fill="url(#fondo)"/>
+  <circle cx="38" cy="10" r="3.2" fill="#ffe2b0"/>
+  <path d="M24 26C20 19 14 18 11 21C8 24 8 28 11 31C14 34 20 33 24 26C28 19 34 18 37 21C40 24 40 28 37 31C34 34 28 33 24 26Z" fill="none" stroke="url(#lazo)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
