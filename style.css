@@ -115,4 +115,4 @@ dialog::backdrop{background:#0007}
 @media(prefers-reduced-motion:reduce){#bCircle{transition:none!important;transform:scale(1)!important}}
 
 /* ---- Imprimir ---- */
-@media print{.hero,.tiles,.bar,#banner,.card:not(#pictos),#pictos>p,#pictos>h3 ~ .bar,dialog,.sos,#rutinas,#senales,#calma,#ayuda,#live,#shareGuide,#whereCard{display:none!important}body{background:#fff;color:#000}.pbar{display:none}#pictos{box-shadow:none;border:0}}
+@media print{.hero,.tiles,.bar,#banner,.card:not(#pictos),#pictos>p,#pictos>h3 ~ .bar,dialog,.sos,#rutinas,#senales,#calma,#ayuda,#live,#whereCard{display:none!important}body{background:#fff;color:#000}.pbar{display:none}#pictos{box-shadow:none;border:0}}
