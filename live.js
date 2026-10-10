@@ -1,5 +1,5 @@
 // Ubicación en vivo con Supabase. Solo se conecta cuando la persona toca un botón.
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
+import { SUPABASE_URL, SUPABASE_ANON_KEY, WEB_URL } from './config.js';
 import { DURATIONS, expiresAt, validCode, normalizeCode, ago, isStale, shouldSend } from './share.js';
 
 const $ = (id) => document.getElementById(id);
@@ -175,8 +175,8 @@ function init() {
   };
   $('liveForgot').onclick = async () => {
     if (!email()) return alert('Escribe tu correo arriba y vuelve a tocar el botón.');
-    const { error } = await sb.auth.resetPasswordForEmail(email()); if (error) return fail(error);
-    showVerify('recovery', 'Si el correo existe, te enviamos un código. Escríbelo y elige una contraseña nueva.');
+    const { error } = await sb.auth.resetPasswordForEmail(email(), { redirectTo: WEB_URL }); if (error) return fail(error);
+    alert('Si el correo existe, te enviamos un enlace. Ábrelo desde el navegador y elige una contraseña nueva. Mira también en «no deseados».');
   };
   $('liveVerifyGo').onclick = async () => {
     const token = $('liveToken').value.trim(); if (!token) return alert('Escribe el código del correo.');
@@ -208,6 +208,15 @@ function init() {
     if (!stopTrack && mem.until && mem.untilUser === uid && new Date(mem.until).getTime() > Date.now()) begin(mem.until).catch(() => { delete mem.until; keep(); paintSharing(); });
     else if (mem.until && (mem.untilUser !== uid || new Date(mem.until).getTime() <= Date.now())) { delete mem.until; delete mem.untilUser; keep(); paintSharing(); }
   }
-  sb.auth.onAuthStateChange((_e, session) => { setTimeout(() => onSession(session), 0); });
+  // Llegó desde el enlace del correo para cambiar la contraseña.
+  $('liveResetGo').onclick = async () => {
+    const np = $('liveResetPass').value; if (!okPass(np)) return;
+    const r = await sb.auth.updateUser({ password: np }); if (r.error) return fail(r.error);
+    $('liveResetPass').value = ''; $('liveReset').hidden = true; alert('Listo, tu contraseña cambió.');
+  };
+  sb.auth.onAuthStateChange((e, session) => {
+    if (e === 'PASSWORD_RECOVERY') setTimeout(() => { $('liveReset').hidden = false; location.hash = '#live'; }, 0);
+    setTimeout(() => onSession(session), 0);
+  });
   sb.auth.getSession().then(({ data }) => onSession(data.session));
 }

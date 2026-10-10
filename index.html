@@ -111,6 +111,11 @@
   <section data-page="live" class="card" id="live">
     <h2 class="sh"><svg class="ico a-green" aria-hidden="true"><use href="#i-live"/></svg>Ubicación en vivo</h2>
     <div id="liveSetup" hidden><p>Esta función todavía no está configurada. Falta conectar el servicio de Supabase (ver <b>supabase/README.md</b>).</p></div>
+    <div id="liveReset" hidden>
+      <h3 class="sub">Elige una contraseña nueva</h3>
+      <label for="liveResetPass">Nueva contraseña (mínimo 8 caracteres)</label><input id="liveResetPass" type="password" autocomplete="new-password">
+      <div class="bar"><button class="primary" id="liveResetGo">Guardar contraseña</button></div>
+    </div>
     <div id="liveAuth" hidden>
       <p>Para compartir o ver ubicaciones, entra con tu cuenta. Cada persona solo ve sus propios datos y los de quienes se vinculan con ella.</p>
       <div id="liveForm">

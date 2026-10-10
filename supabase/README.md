@@ -7,12 +7,16 @@ La app guarda la ubicación en tu propio proyecto de Supabase. Sin este paso, la
 2. **New project**. Elige un nombre (por ejemplo `asisazul`), una contraseña de base de datos (guárdala) y la región más cercana.
 
 ## 2. Configurar las cuentas (correo y contraseña)
-En el proyecto:
-1. **Authentication → Sign In / Providers → Email**: déjalo activado y deja **Confirm email** activado.
-2. En esa misma pantalla, sube **Minimum password length** a **8**.
-3. **Authentication → Email Templates**: en **Confirm signup** y en **Reset Password**, cambia el cuerpo del mensaje para que muestre el código en vez del enlace. Por ejemplo: `Tu código de Asisazul es: {{ .Token }}`. La app pide ese código; no usa enlaces. Tienes los textos listos en `plantilla-confirmar-cuenta.html` y `plantilla-restablecer-clave.html`: abre el archivo, copia todo y pégalo en el cuadro del cuerpo (*Message body*). Asunto sugerido: «Tu código de Asisazul».
+Con el plan gratuito de Supabase no se pueden editar las plantillas de correo, así que la app usa los correos estándar:
+1. **Authentication → Sign In / Providers → Email**: apaga **Confirm email**. Así crear la cuenta es inmediato, sin correo.
+2. En la misma pantalla, sube **Minimum password length** a **8**, si lo encuentras.
+3. **Authentication → URL Configuration**: en **Site URL** escribe `https://dmcripto.github.io/asisazul/` y toca **Save**. Con esto el enlace de «olvidé mi contraseña» abre la web de Asisazul.
 4. **Anonymous Sign-Ins** debe quedar **desactivado**.
-5. El correo que trae Supabase por defecto solo permite unos pocos mensajes por hora. Para usarlo en serio, configura tu propio servidor de correo en **Project Settings → Authentication → SMTP Settings**.
+5. No hace falta configurar **SMTP**. No lo actives con los campos vacíos.
+
+**Olvidé mi contraseña:** la app envía el correo estándar de Supabase con un enlace. Se abre en el navegador, en la web de Asisazul, y ahí se elige la contraseña nueva. Después se vuelve a entrar en la app.
+
+*(Opcional, más adelante: si configuras tu propio servidor de correo en SMTP Settings, puedes personalizar los mensajes con `plantilla-confirmar-cuenta.html` y `plantilla-restablecer-clave.html`, y volver a activar **Confirm email**.)*
 
 ## 3. Crear las tablas y las reglas de seguridad
 **SQL Editor → New query**, pega todo `supabase/schema.sql` y pulsa **Run**. Puedes repetirlo sin problema.
