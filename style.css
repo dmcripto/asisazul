@@ -21,16 +21,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 a{color:var(--main)}
 
 /* ---- Portada ---- */
-.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--hero1),var(--hero2));padding:calc(env(safe-area-inset-top) + 1rem) 1.2rem 7.5rem;border-radius:0 0 32px 32px}
-.hero-top{display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap;position:relative;z-index:1;max-width:980px;margin:0 auto}
-.brand{display:inline-flex;align-items:center;gap:.6rem;font-weight:800;font-size:1.15rem;letter-spacing:.02em}
-.logo{width:38px;height:38px}
-.hero-tools{display:flex;gap:.4rem;flex-wrap:wrap}
-.hero-tools button{min-height:40px;padding:.2rem .8rem;background:rgba(255,255,255,.55);border-color:transparent}
-:root[data-theme=dark] .hero-tools button,:root:not([data-theme=light]) .hero-tools button{background:rgba(0,0,0,.22)}
-@media(prefers-color-scheme:light){:root:not([data-theme=dark]) .hero-tools button{background:rgba(255,255,255,.6)}}
-.hero h1,.hero-sub,.hello-sub,.hero-actions{position:relative;z-index:1;max-width:980px;margin-left:auto;margin-right:auto}
-.hero h1{font-size:clamp(1.7rem,6vw,2.5rem);margin-top:1.4rem;margin-bottom:.2rem}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--hero1),var(--hero2));padding:1.2rem 1.2rem 7.5rem;border-radius:0 0 32px 32px}
+.hero h1{font-size:clamp(1.7rem,6vw,2.5rem);margin-top:.4rem;margin-bottom:.2rem}
 .hello-sub{margin-top:0;margin-bottom:1rem;color:var(--ink);font-size:1.1rem}
 .hero-actions{display:flex;flex-wrap:wrap;gap:.6rem}
 .hero-actions button{padding:.4rem .9rem}
@@ -127,3 +119,33 @@ dialog::backdrop{background:#0007}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]) .back{background:rgba(24,32,35,.6)}}
 .back:not(.pg-off)+h1{margin-top:.6rem}
 .sub{font-size:1.1rem;margin:1.1rem 0 .3rem}
+
+/* ---- Barra superior fija ---- */
+.topbar-wrap{position:sticky;top:0;z-index:30;background:var(--card);box-shadow:0 2px 14px rgba(36,50,56,.1);padding-top:env(safe-area-inset-top)}
+.topbar{display:flex;align-items:center;gap:.4rem 1rem;flex-wrap:wrap;max-width:1100px;margin:0 auto;padding:.5rem 1rem}
+.brand{display:inline-flex;align-items:center;gap:.6rem;font-weight:800;font-size:1.15rem;letter-spacing:.02em;color:var(--ink);text-decoration:none;min-height:44px}
+.logo{width:36px;height:36px}
+.menu{display:flex;align-items:center;gap:.2rem;flex:1}
+.menu>a,.dd-btn{display:inline-flex;align-items:center;min-height:44px;padding:.3rem .8rem;border-radius:12px;border:0;background:transparent;color:var(--ink);font-weight:700;text-decoration:none;cursor:pointer}
+.menu>a:hover,.dd-btn:hover{background:var(--t-teal)}
+.menu a[aria-current=page],.dd-btn.on{background:var(--t-teal);color:var(--ink);box-shadow:inset 0 -3px 0 var(--main)}
+.dd-btn::after{content:"▾";margin-left:.35rem;font-size:.8em}
+.dd{position:relative}
+.dd-list{display:none;position:absolute;top:calc(100% + 4px);left:0;min-width:210px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:.4rem;z-index:40}
+.dd.open .dd-list{display:block}
+.dd-list a{display:flex;align-items:center;min-height:44px;padding:.3rem .8rem;border-radius:10px;color:var(--ink);text-decoration:none;font-weight:600}
+.dd-list a:hover{background:var(--t-teal)}.dd-list a[aria-current=page]{background:var(--t-teal);box-shadow:inset 3px 0 0 var(--main)}
+.tools{display:flex;align-items:center;gap:.4rem;margin-left:auto}
+.tools button{min-height:44px;padding:.2rem .8rem}
+.tools .sos{padding-left:.5rem}
+.menu-btn{display:none;white-space:nowrap}
+@media(max-width:780px){
+  .menu-btn{display:inline-flex;align-items:center}
+  .menu{display:none;flex-direction:column;align-items:stretch;width:100%;order:5;flex:none;padding-bottom:.4rem}
+  .menu.open{display:flex}
+  .menu>a,.dd-btn{width:100%;justify-content:flex-start}
+  .dd-btn{justify-content:space-between}
+  .dd-list{position:static;box-shadow:none;border:0;padding:0 0 0 .8rem;min-width:0}
+}
+@media print{.topbar-wrap{display:none!important}}
+.hero.inner .hero-actions{display:none}

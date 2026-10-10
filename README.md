@@ -21,6 +21,7 @@ Web para ayudar a personas autistas y con discapacidad a organizar su día. Esta
 - **Rutinas paso a paso:** listas con pictogramas (mañana, noche o las tuyas). Se marca cada paso y el avance se reinicia cada día.
 - **Registro de señales:** ánimo, sobrecarga sensorial, crisis y qué la provocó. Muestra un resumen de la semana y exporta un .csv para llevar al terapeuta.
 - **Calma:** respiración guiada con texto y cuenta atrás (sin movimiento si el sistema pide reducirlo) y el ejercicio 5-4-3-2-1.
+- **Barra de navegación fija arriba:** logo, Inicio, grupos desplegables («Mi día» y «Bienestar»), Ubicación y Mi ficha, y a la derecha el tamaño de texto, el tema y el botón de Ayuda. En el teléfono se recoge en un botón «☰ Menú». Se maneja con teclado (Esc cierra) y marca la pantalla actual.
 - **Una pantalla por sección:** la portada solo muestra el saludo y los mosaicos. Cada mosaico abre su propia pantalla, con un botón «← Inicio» (y el botón atrás de Android también vuelve). El botón de ayuda 🆘 se ve en todas.
 - **Portada ilustrada** con saludo según la hora, el próximo evento del día y accesos en forma de mosaicos con íconos. Todas las ilustraciones son propias (SVG), caben en el teléfono y no necesitan internet.
 - **Copia de seguridad:** guarda todos los datos del teléfono en un archivo y los restaura (agenda, ficha, rutinas y registros). El archivo contiene datos de salud: hay que guardarlo en un lugar privado.

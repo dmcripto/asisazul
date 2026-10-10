@@ -24,7 +24,10 @@ const THEMES = [['auto', 'automático'], ['light', 'claro'], ['dark', 'oscuro']]
 function applyTheme() {
   const t = state.theme || 'auto';
   if (t === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.dataset.theme = t;
-  $('theme').textContent = '🌓 Tema: ' + THEMES.find((x) => x[0] === t)[1];
+  const label = THEMES.find((x) => x[0] === t)[1];
+  const icon = { auto: '🌓', light: '☀️', dark: '🌙' }[t];
+  $('theme').innerHTML = `<span aria-hidden="true">${icon}</span>&nbsp;Tema`;
+  $('theme').setAttribute('aria-label', 'Tema ' + label + '. Tocar para cambiar');
 }
 $('theme').onclick = () => { const i = THEMES.findIndex((x) => x[0] === (state.theme || 'auto')); state.theme = THEMES[(i + 1) % 3][0]; applyTheme(); save(); };
 applyTheme();

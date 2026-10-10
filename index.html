@@ -25,16 +25,31 @@
 <symbol id="art-sol" viewBox="0 0 160 110"><circle cx="112" cy="36" r="18" fill="#ffd9a0"/><path d="M0 110V82q40-26 80-8t80-6v42z" fill="var(--h1)"/><path d="M0 110V94q50-18 100-4t60-4v24z" fill="var(--h2)"/><g transform="translate(36 72)"><path d="M0 22V6" stroke="var(--h3)" stroke-width="3" stroke-linecap="round"/><circle cx="0" cy="3" r="6" fill="#f4b8c7"/><circle cx="0" cy="3" r="2.5" fill="#ffd9a0"/></g></symbol>
 <symbol id="art-brote" viewBox="0 0 160 110"><ellipse cx="80" cy="98" rx="46" ry="7" fill="var(--h1)"/><path d="M58 70h44l-6 28H64z" fill="#e8b4a0"/><path d="M80 70V44" stroke="var(--h3)" stroke-width="4" stroke-linecap="round"/><path d="M80 52c-18 0-24-14-22-22 14 0 22 8 22 22zM80 46c14-2 22-10 22-20-14 0-22 8-22 20z" fill="var(--h2)"/></symbol>
 </defs></svg>
-<header class="hero">
-  <div class="hero-top">
-    <span class="brand"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="14" fill="var(--main)"/><circle cx="24" cy="24" r="10" fill="none" stroke="var(--main-ink)" stroke-width="3" opacity=".55"/><circle cx="24" cy="24" r="4.5" fill="var(--main-ink)"/></svg>Asisazul</span>
-    <span class="hero-tools"><button id="txt" aria-label="Cambiar tamaño de texto">Aa</button><button id="theme">🌓 Tema: automático</button></span>
+<header class="topbar-wrap">
+<div class="topbar">
+  <a class="brand" href="#" aria-label="Asisazul, inicio"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="14" fill="var(--main)"/><circle cx="24" cy="24" r="10" fill="none" stroke="var(--main-ink)" stroke-width="3" opacity=".55"/><circle cx="24" cy="24" r="4.5" fill="var(--main-ink)"/></svg><span>Asisazul</span></a>
+  <nav id="menu" class="menu" aria-label="Principal">
+    <a href="#" data-nav="home">Inicio</a>
+    <div class="dd"><button class="dd-btn" type="button" aria-expanded="false">Mi día</button>
+      <div class="dd-list"><a href="#hoy" data-nav="hoy">Hoy</a><a href="#calendario" data-nav="calendario">Calendario</a><a href="#rutinas" data-nav="rutinas">Rutinas</a></div></div>
+    <div class="dd"><button class="dd-btn" type="button" aria-expanded="false">Bienestar</button>
+      <div class="dd-list"><a href="#senales" data-nav="senales">Señales</a><a href="#calma" data-nav="calma">Calma</a><a href="#pictos" data-nav="pictos">Pictogramas</a></div></div>
+    <a href="#live" data-nav="live">Ubicación</a>
+    <a href="#ayuda" data-nav="ayuda">Mi ficha</a>
+  </nav>
+  <div class="tools">
+    <button id="txt" type="button" aria-label="Cambiar tamaño de texto">Aa</button>
+    <button id="theme" type="button">🌓 Tema</button>
+    <button id="sosOpen" class="sos" type="button"><svg class="ico sm a-sos" aria-hidden="true"><use href="#i-sos"/></svg><span>Ayuda</span></button>
+    <button id="menuBtn" class="menu-btn" type="button" aria-expanded="false" aria-controls="menu">☰ Menú</button>
   </div>
+</div>
+</header>
+<div class="hero" role="region" aria-label="Portada">
   <button id="back" class="back pg-off" type="button">← Inicio</button>
   <h1 id="hello" tabindex="-1">Hola</h1>
   <p id="helloSub" class="hello-sub"></p>
   <div class="hero-actions">
-    <button id="sosOpen" class="sos"><svg class="ico sm a-sos" aria-hidden="true"><use href="#i-sos"/></svg>Necesito ayuda</button>
     <button id="sound">🔔 Alarmas</button>
     <button id="where">📍 ¿Dónde estoy?</button>
     <button id="ics">⬇ Exportar .ics</button>
@@ -48,7 +63,7 @@
     <g fill="var(--h3)"><rect x="196" y="120" width="6" height="30" rx="3"/><circle cx="199" cy="112" r="20"/><rect x="250" y="132" width="5" height="22" rx="2.5"/><circle cx="252" cy="126" r="14"/><rect x="690" y="130" width="5" height="22" rx="2.5"/><circle cx="692" cy="124" r="15"/></g>
     <path d="M330 200q40-34 90-40t120-6" fill="none" stroke="#fff6ea" stroke-width="10" stroke-linecap="round" opacity=".8"/>
   </svg>
-</header>
+</div>
 <main>
   <nav data-page="home" class="tiles" aria-label="Secciones"><a class="tile" href="#hoy"><svg class="ico a-amber" aria-hidden="true"><use href="#i-hoy"/></svg><span>Hoy</span></a><a class="tile" href="#calendario"><svg class="ico a-teal" aria-hidden="true"><use href="#i-cal"/></svg><span>Calendario</span></a><a class="tile" href="#rutinas"><svg class="ico a-amber" aria-hidden="true"><use href="#i-rutinas"/></svg><span>Rutinas</span></a><a class="tile" href="#senales"><svg class="ico a-lav" aria-hidden="true"><use href="#i-senales"/></svg><span>Señales</span></a><a class="tile" href="#calma"><svg class="ico a-sky" aria-hidden="true"><use href="#i-calma"/></svg><span>Calma</span></a><a class="tile" href="#pictos"><svg class="ico a-rose" aria-hidden="true"><use href="#i-pictos"/></svg><span>Pictogramas</span></a><a class="tile" href="#live"><svg class="ico a-green" aria-hidden="true"><use href="#i-live"/></svg><span>Ubicación</span></a><a class="tile" href="#ayuda"><svg class="ico a-teal" aria-hidden="true"><use href="#i-ayuda"/></svg><span>Mi ficha</span></a></nav>
   <div id="banner" data-page="home"></div>
