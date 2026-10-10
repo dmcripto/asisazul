@@ -74,7 +74,23 @@
   <section class="card" id="live">
     <h3 style="margin-top:0">Ubicación en vivo</h3>
     <div id="liveSetup" hidden><p>Esta función todavía no está configurada. Falta conectar el servicio de Supabase (ver <b>supabase/README.md</b>).</p></div>
-    <div id="liveMain">
+    <div id="liveAuth" hidden>
+      <p>Para compartir o ver ubicaciones, entra con tu cuenta. Cada persona solo ve sus propios datos y los de quienes se vinculan con ella.</p>
+      <div id="liveForm">
+        <label for="liveEmail">Correo</label><input id="liveEmail" type="email" autocomplete="email" inputmode="email">
+        <label for="livePass">Contraseña (mínimo 8 caracteres)</label><input id="livePass" type="password" autocomplete="current-password">
+        <label for="liveName">Tu nombre (solo para crear cuenta; lo verán tus familiares)</label><input id="liveName" maxlength="40" autocomplete="name">
+        <div class="bar"><button class="primary" id="liveSignIn">Entrar</button><button id="liveSignUp">Crear cuenta</button><button id="liveForgot">Olvidé mi contraseña</button></div>
+      </div>
+      <div id="liveVerify" hidden>
+        <p id="liveVerifyMsg" aria-live="polite"></p>
+        <label for="liveToken">Código del correo</label><input id="liveToken" inputmode="numeric" autocomplete="one-time-code" maxlength="10">
+        <div id="liveNewPassBox" hidden><label for="liveNewPass">Nueva contraseña (mínimo 8 caracteres)</label><input id="liveNewPass" type="password" autocomplete="new-password"></div>
+        <div class="bar"><button class="primary" id="liveVerifyGo">Confirmar</button><button id="liveVerifyBack">Volver</button></div>
+      </div>
+    </div>
+    <div id="liveMain" hidden>
+      <p>Sesión de <b id="liveWho"></b> <button id="liveOut">Cerrar sesión</button></p>
       <p>Tú decides si compartes, con quién y por cuánto tiempo. Solo se guarda tu última posición, y se borra al parar.</p>
       <h4>Compartir mi ubicación</h4>
       <p id="liveState" aria-live="polite"></p>
@@ -86,6 +102,7 @@
       <div class="bar"><input id="liveCodeIn" aria-label="Código del familiar" placeholder="Código de 6 letras o números" maxlength="8" autocapitalize="characters" style="flex:1;min-width:12rem"><button id="liveRedeem">Vincular</button></div>
       <p><b>Personas que veo</b></p><div id="liveWatching"></div>
       <div class="bar"><button id="liveRefresh">🔄 Actualizar</button></div>
+      <details><summary>Mi cuenta</summary><p>Si borras tu cuenta se eliminan tu perfil, tu ubicación, tus códigos y tus vínculos. No se puede deshacer.</p><button id="liveDelete" style="border-color:var(--warn);color:var(--warn)">Borrar mi cuenta y mis datos</button></details>
       <div id="liveMapBox" hidden><div id="livePlaces"></div><div id="liveMap" role="img" aria-label="Mapa con la ubicación de tus familiares"></div></div>
     </div>
   </section>

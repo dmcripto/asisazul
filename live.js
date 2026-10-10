@@ -9,13 +9,8 @@ const configured = !!(SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase);
 const K = 'asisazul-live-v1';
 const mem = (() => { try { return JSON.parse(localStorage.getItem(K)) || {}; } catch { return {}; } })();
 const keep = () => { try { localStorage.setItem(K, JSON.stringify(mem)); } catch {} };
-mem.alias ||= {}; // owner uuid -> nombre que le puse a esa persona
 
-if (!configured) {
-  $('liveSetup').hidden = false; $('liveMain').hidden = true;
-} else {
-  $('liveSetup').hidden = true; $('liveMain').hidden = false;
-}
+$('liveSetup').hidden = configured;
 if (configured) init();
 
 function init() {
@@ -23,9 +18,10 @@ function init() {
   const fail = (e) => alert('No se pudo completar: ' + (e && e.message ? e.message : e));
   const me = async () => {
     const { data } = await sb.auth.getSession();
-    if (data.session) return data.session.user;
-    const r = await sb.auth.signInAnonymously(); if (r.error) throw r.error; return r.data.user;
+    if (!data.session) throw new Error('Primero entra a tu cuenta.');
+    return data.session.user;
   };
+  const names = {}; // uuid -> nombre de perfil
 
   // ---------- Compartir mi ubicación ----------
   $('liveDur').innerHTML = DURATIONS.map((d) => `<option value="${d.min}">${d.label}</option>`).join('');
@@ -63,13 +59,13 @@ function init() {
     });
     clearTimeout(autoStop);
     autoStop = setTimeout(end, Math.max(0, new Date(untilIso).getTime() - Date.now()));
-    mem.until = untilIso; keep(); paintSharing();
+    mem.until = untilIso; mem.untilUser = uid; keep(); paintSharing();
     try { await refreshLinks(); } catch {}
   }
   async function end() {
     clearTimeout(autoStop); last = null;
     if (stopTrack) { try { await stopTrack(); } catch {} stopTrack = null; }
-    delete mem.until; keep(); paintSharing();
+    delete mem.until; delete mem.untilUser; keep(); paintSharing();
     try { if (uid) await sb.from('locations').delete().eq('owner', uid); } catch {}
   }
 
@@ -93,14 +89,16 @@ function init() {
   async function refreshLinks() {
     const u = await me();
     const { data, error } = await sb.from('links').select('owner,follower,created_at'); if (error) throw error;
+    const ids = [...new Set(data.flatMap((l) => [l.owner, l.follower]))].filter((x) => x !== u.id);
+    if (ids.length) { const pr = await sb.from('profiles').select('id,name').in('id', ids); (pr.data || []).forEach((r) => { names[r.id] = r.name; }); }
     const mine = data.filter((l) => l.owner === u.id), watching = data.filter((l) => l.follower === u.id);
     const li = (text, btnText, fn) => { const d = document.createElement('div'); d.className = 'item'; const s = document.createElement('span'); s.textContent = text; const b = document.createElement('button'); b.textContent = btnText; b.onclick = fn; d.append(s, b); return d; };
-    $('liveFollowers').replaceChildren(...mine.map((l) => li(`Familiar vinculado el ${new Date(l.created_at).toLocaleDateString('es')}`, 'Quitar', async () => {
+    $('liveFollowers').replaceChildren(...mine.map((l) => li(`${names[l.follower] || 'Familiar'} · vinculado el ${new Date(l.created_at).toLocaleDateString('es')}`, 'Quitar', async () => {
       if (!confirm('¿Quitar a este familiar? Ya no podrá ver tu ubicación.')) return;
       const r = await sb.from('links').delete().eq('owner', l.owner).eq('follower', l.follower); if (r.error) return fail(r.error); refreshLinks();
     })));
     if (!mine.length) $('liveFollowers').textContent = 'Nadie vinculado todavía.';
-    $('liveWatching').replaceChildren(...watching.map((l) => li(mem.alias[l.owner] || 'Persona vinculada', 'Dejar de ver', async () => {
+    $('liveWatching').replaceChildren(...watching.map((l) => li(names[l.owner] || 'Persona vinculada', 'Dejar de ver', async () => {
       const r = await sb.from('links').delete().eq('owner', l.owner).eq('follower', u.id); if (r.error) return fail(r.error); delete places[l.owner]; refreshLinks(); drawMap();
     })));
     if (!watching.length) $('liveWatching').textContent = 'No ves a nadie todavía.';
@@ -111,9 +109,7 @@ function init() {
     if (!validCode(code)) return alert('El código tiene 6 letras o números. Revísalo.');
     try {
       await me();
-      const { data, error } = await sb.rpc('redeem_code', { p_code: code }); if (error) throw error;
-      const name = prompt('¿Cómo quieres llamar a esta persona? (solo se guarda en tu teléfono)', 'Mi familiar');
-      mem.alias[data] = (name || '').trim() || 'Persona vinculada'; keep();
+      const { error } = await sb.rpc('redeem_code', { p_code: code }); if (error) throw error;
       $('liveCodeIn').value = ''; await refreshLinks(); watchRealtime();
     } catch (e) { fail(e); }
   };
@@ -126,13 +122,13 @@ function init() {
     $('livePlaces').replaceChildren(...rows.map(([o, p]) => {
       const d = document.createElement('div'); d.className = 'item';
       const stale = isStale(p.updated_at, Date.now());
-      d.textContent = `${mem.alias[o] || 'Persona vinculada'} · ${ago(p.updated_at, Date.now())}${stale ? ' (puede no estar al día)' : ''}`;
+      d.textContent = `${names[o] || 'Persona vinculada'} · ${ago(p.updated_at, Date.now())}${stale ? ' (puede no estar al día)' : ''}`;
       return d;
     }));
     if (!rows.length || !window.L) return;
     if (!map) { map = L.map('liveMap'); L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map); layer = L.layerGroup().addTo(map); }
     layer.clearLayers();
-    const pts = rows.map(([o, p]) => { L.circleMarker([p.lat, p.lon], { radius: 10, color: '#2f6f6c', fillOpacity: .8 }).bindTooltip(mem.alias[o] || 'Persona vinculada', { permanent: true, direction: 'top' }).addTo(layer); return [p.lat, p.lon]; });
+    const pts = rows.map(([o, p]) => { L.circleMarker([p.lat, p.lon], { radius: 10, color: '#2f6f6c', fillOpacity: .8 }).bindTooltip(names[o] || 'Persona vinculada', { permanent: true, direction: 'top' }).addTo(layer); return [p.lat, p.lon]; });
     map.invalidateSize(); map.fitBounds(pts, { maxZoom: 16, padding: [40, 40] });
   }
   async function loadPlaces(owners) {
@@ -152,8 +148,65 @@ function init() {
   $('liveRefresh').onclick = async () => { try { await refreshLinks(); watchRealtime(); } catch (e) { fail(e); } };
   setInterval(() => { if (Object.keys(places).length) drawMap(); }, 30000);
 
-  // Si la app se cerró compartiendo y todavía no venció, se retoma y se ve en pantalla.
-  paintSharing();
-  if (mem.until && new Date(mem.until).getTime() > Date.now()) begin(mem.until).catch(() => { delete mem.until; keep(); paintSharing(); });
-  else if (mem.until) { delete mem.until; keep(); }
+  // ---------- Cuenta (correo y contraseña) ----------
+  const email = () => $('liveEmail').value.trim();
+  const okPass = (p) => p.length >= 8 || (alert('La contraseña debe tener al menos 8 caracteres.'), false);
+  let verifyMode = null;
+  const showVerify = (mode, msg) => {
+    verifyMode = mode; $('liveForm').hidden = true; $('liveVerify').hidden = false;
+    $('liveNewPassBox').hidden = mode !== 'recovery'; $('liveVerifyMsg').textContent = msg; $('liveToken').value = ''; $('liveToken').focus();
+  };
+  $('liveVerifyBack').onclick = () => { verifyMode = null; $('liveVerify').hidden = true; $('liveForm').hidden = false; };
+
+  $('liveSignUp').onclick = async () => {
+    if (!email() || !okPass($('livePass').value)) return;
+    const name = $('liveName').value.trim() || email().split('@')[0];
+    const { data, error } = await sb.auth.signUp({ email: email(), password: $('livePass').value, options: { data: { name } } });
+    if (error) return fail(error);
+    if (!data.session) showVerify('signup', 'Te enviamos un código al correo. Escríbelo aquí para confirmar tu cuenta.');
+  };
+  $('liveSignIn').onclick = async () => {
+    if (!email() || !$('livePass').value) return alert('Escribe tu correo y tu contraseña.');
+    const { error } = await sb.auth.signInWithPassword({ email: email(), password: $('livePass').value });
+    if (!error) return;
+    if (/confirm/i.test(error.message)) { await sb.auth.resend({ type: 'signup', email: email() }); return showVerify('signup', 'Falta confirmar tu correo. Te enviamos un código nuevo.'); }
+    fail(new Error('Correo o contraseña incorrectos.'));
+  };
+  $('liveForgot').onclick = async () => {
+    if (!email()) return alert('Escribe tu correo arriba y vuelve a tocar el botón.');
+    const { error } = await sb.auth.resetPasswordForEmail(email()); if (error) return fail(error);
+    showVerify('recovery', 'Si el correo existe, te enviamos un código. Escríbelo y elige una contraseña nueva.');
+  };
+  $('liveVerifyGo').onclick = async () => {
+    const token = $('liveToken').value.trim(); if (!token) return alert('Escribe el código del correo.');
+    const { error } = await sb.auth.verifyOtp({ email: email(), token, type: verifyMode });
+    if (error) return fail(new Error('Código incorrecto o vencido.'));
+    if (verifyMode === 'recovery') {
+      const np = $('liveNewPass').value; if (!okPass(np)) return;
+      const r = await sb.auth.updateUser({ password: np }); if (r.error) return fail(r.error);
+    }
+    $('livePass').value = ''; $('liveNewPass').value = ''; $('liveVerifyBack').click();
+  };
+  $('liveOut').onclick = async () => { await end(); await sb.auth.signOut(); };
+  $('liveDelete').onclick = async () => {
+    if (!confirm('Se borrará tu cuenta y todos tus datos de ubicación. No se puede deshacer. ¿Seguir?')) return;
+    if (!confirm('¿Seguro? Esta es la última confirmación.')) return;
+    try { await end(); const { error } = await sb.rpc('delete_account'); if (error) throw error; await sb.auth.signOut(); alert('Tu cuenta fue borrada.'); } catch (e) { fail(e); }
+  };
+
+  async function onSession(session) {
+    $('liveAuth').hidden = !!session; $('liveMain').hidden = !session;
+    if (!session) { if (rt) { sb.removeChannel(rt); rt = null; } stopTrack = null; uid = null; Object.keys(places).forEach((k) => delete places[k]); drawMap(); paintSharing(); return; }
+    uid = session.user.id;
+    $('liveWho').textContent = session.user.email;
+    const name = (session.user.user_metadata && session.user.user_metadata.name) || session.user.email.split('@')[0];
+    await sb.from('profiles').upsert({ id: uid, name: String(name).slice(0, 40) });
+    paintSharing();
+    try { await refreshLinks(); watchRealtime(); } catch {}
+    // Si la app se cerró compartiendo y todavía no venció (y es la misma cuenta), se retoma y se ve en pantalla.
+    if (!stopTrack && mem.until && mem.untilUser === uid && new Date(mem.until).getTime() > Date.now()) begin(mem.until).catch(() => { delete mem.until; keep(); paintSharing(); });
+    else if (mem.until && (mem.untilUser !== uid || new Date(mem.until).getTime() <= Date.now())) { delete mem.until; delete mem.untilUser; keep(); paintSharing(); }
+  }
+  sb.auth.onAuthStateChange((_e, session) => { setTimeout(() => onSession(session), 0); });
+  sb.auth.getSession().then(({ data }) => onSession(data.session));
 }

@@ -1,6 +1,11 @@
 -- Ubicación en vivo de Asisazul. Pegar completo en Supabase -> SQL Editor -> Run.
 -- Privacidad: solo se guarda la ÚLTIMA posición (sin historial) y se borra al dejar de compartir.
 
+create table if not exists public.profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  name text not null check (char_length(name) between 1 and 40)
+);
+
 create table if not exists public.locations (
   owner uuid primary key references auth.users(id) on delete cascade,
   lat double precision not null,
@@ -23,9 +28,18 @@ create table if not exists public.links (
   primary key (owner, follower)
 );
 
+alter table public.profiles enable row level security;
 alter table public.locations enable row level security;
 alter table public.share_codes enable row level security;
 alter table public.links enable row level security;
+
+-- profiles: cada persona edita solo el suyo. Lo ven ella y las personas vinculadas con ella (en cualquier sentido).
+drop policy if exists prof_write on public.profiles;
+create policy prof_write on public.profiles for all using (id = auth.uid()) with check (id = auth.uid());
+drop policy if exists prof_read on public.profiles;
+create policy prof_read on public.profiles for select using (
+  id = auth.uid() or exists (select 1 from public.links l
+    where (l.owner = profiles.id and l.follower = auth.uid()) or (l.follower = profiles.id and l.owner = auth.uid())));
 
 -- locations: la persona escribe/borra la suya; la ven ella y sus familiares vinculados, y solo mientras no venza.
 drop policy if exists loc_owner_write on public.locations;
@@ -85,6 +99,16 @@ revoke all on function public.create_code() from public, anon;
 revoke all on function public.redeem_code(text) from public, anon;
 grant execute on function public.create_code() to authenticated;
 grant execute on function public.redeem_code(text) to authenticated;
+
+-- Borrar la cuenta y TODOS sus datos (perfil, ubicación, códigos y vínculos se borran en cascada).
+create or replace function public.delete_account() returns void
+language plpgsql security definer set search_path = public, auth as $$
+begin
+  if auth.uid() is null then raise exception 'sin sesión'; end if;
+  delete from auth.users where id = auth.uid();
+end $$;
+revoke all on function public.delete_account() from public, anon;
+grant execute on function public.delete_account() to authenticated;
 
 -- Tiempo real (respeta las reglas de arriba).
 alter publication supabase_realtime add table public.locations;
