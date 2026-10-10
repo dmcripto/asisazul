@@ -178,3 +178,22 @@ dialog::backdrop{background:#0007}
 @media(max-width:600px){.hero{padding-bottom:9.5rem}.scene{height:140px}.tiles{margin-top:-1.8rem}}
 .pw{position:relative;display:block}.pw input{padding-right:6.2rem}
 .pw-btn{position:absolute;right:.3rem;top:50%;transform:translateY(-50%);min-height:38px;padding:.1rem .8rem;font-weight:700;border-radius:10px}
+
+/* ---- Tarjeta de entrada: compacta, centrada y con efectos suaves ---- */
+.authcard{max-width:380px;margin:1rem auto;padding:1.4rem 1.4rem 1.2rem;border-radius:26px;background:var(--bg);border:1px solid var(--line);box-shadow:0 14px 40px rgba(36,50,56,.14);position:relative;overflow:hidden}
+.authcard:not([hidden]){animation:rise .55s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+.auth-head{text-align:center;position:relative}
+.auth-head p{font-size:.92rem;color:var(--mute);margin:.2rem 0 .6rem}
+.auth-head .sub{margin:.4rem 0 0;font-size:1.3rem}
+.auth-logo{width:64px;height:64px;position:relative;filter:drop-shadow(0 6px 10px rgba(31,111,122,.35))}
+.auth-glow{position:absolute;left:50%;top:-30px;width:190px;height:150px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(108,183,234,.45),rgba(108,183,234,0));pointer-events:none}
+.authcard label{font-size:.92rem;margin-top:.7rem}
+.authcard input{padding:.5rem .7rem;border-radius:14px;transition:box-shadow .25s ease,border-color .25s ease}
+.authcard input:focus{border-color:var(--main);box-shadow:0 0 0 4px rgba(111,179,174,.28);outline:none}
+.authcard .pw input{padding-right:5.6rem}
+.auth-btns{display:flex;flex-direction:column;gap:.5rem;margin-top:1rem}
+.auth-btns button{width:100%;transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
+.auth-btns button:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(36,50,56,.16)}
+.auth-btns .linkbtn{border-color:transparent;background:transparent;text-decoration:underline;font-weight:600;min-height:40px}
+.auth-btns .linkbtn:hover{box-shadow:none;transform:none}

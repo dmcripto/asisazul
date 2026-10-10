@@ -121,18 +121,19 @@
   <section data-page="live" class="card" id="live">
     <h2 class="sh"><svg class="ico a-green" aria-hidden="true"><use href="#i-live"/></svg>Ubicación en vivo</h2>
     <div id="liveSetup" hidden><p>Esta función todavía no está configurada. Falta conectar el servicio de Supabase (ver <b>supabase/README.md</b>).</p></div>
-    <div id="liveReset" hidden>
+    <div id="liveReset" class="authcard" hidden>
       <h3 class="sub">Elige una contraseña nueva</h3>
       <label for="liveResetPass">Nueva contraseña (mínimo 8 caracteres)</label><input id="liveResetPass" type="password" autocomplete="new-password">
       <div class="bar"><button class="primary" id="liveResetGo">Guardar contraseña</button></div>
     </div>
-    <div id="liveAuth" hidden>
-      <p>Para compartir o ver ubicaciones, entra con tu cuenta. Cada persona solo ve sus propios datos y los de quienes se vinculan con ella.</p>
+    <div id="liveAuth" class="authcard" hidden>
+      <div class="auth-head"><span class="auth-glow" aria-hidden="true"></span><img class="auth-logo" src="logo.svg" alt="" width="64" height="64"><h3 class="sub">Entra a tu cuenta</h3>
+      <p>Cada persona solo ve sus propios datos y los de quienes se vinculan con ella.</p></div>
       <div id="liveForm">
         <label for="liveEmail">Correo</label><input id="liveEmail" type="email" autocomplete="email" inputmode="email">
         <label for="livePass">Contraseña (mínimo 8 caracteres)</label><input id="livePass" type="password" autocomplete="current-password">
         <label for="liveName">Tu nombre (solo para crear cuenta; lo verán tus familiares)</label><input id="liveName" maxlength="40" autocomplete="name">
-        <div class="bar"><button class="primary" id="liveSignIn">Entrar</button><button id="liveSignUp">Crear cuenta</button><button id="liveForgot">Olvidé mi contraseña</button></div>
+        <div class="auth-btns"><button class="primary" id="liveSignIn">Entrar</button><button id="liveSignUp">Crear cuenta</button><button id="liveForgot" class="linkbtn">Olvidé mi contraseña</button></div>
       </div>
       <div id="liveVerify" hidden>
         <p id="liveVerifyMsg" aria-live="polite"></p>
