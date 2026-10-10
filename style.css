@@ -53,3 +53,16 @@ details{border:1px solid var(--line);border-radius:10px;padding:.5rem .8rem;marg
 .toggle .knob{width:34px;height:34px;border-radius:50%;background:var(--mute);flex:none;margin-right:.2rem}
 .toggle[aria-checked=true]{background:var(--main);color:var(--main-ink);border-color:var(--main)}
 .toggle[aria-checked=true] .knob{background:var(--main-ink)}
+.sos{background:var(--warn);color:#fff;border-color:var(--warn);font-weight:700}
+nav.bar{margin:.2rem 0 .6rem}nav .btnlink{min-height:40px}
+.big{font-size:1.2rem;font-weight:600}.fs{border:1px solid var(--line);border-radius:10px;margin:.6rem 0;padding:.4rem .8rem}.fs legend{font-weight:600;padding:0 .3rem}
+.mood{font-size:1.8rem;min-width:56px;min-height:56px}.mood[aria-pressed=true]{background:var(--terapia);border-color:var(--main)}
+.rstep{display:flex;gap:.8rem;align-items:center;width:100%;text-align:left;margin:.4rem 0;min-height:64px;font-size:1.1rem}
+.rstep img{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:8px;flex:none}
+.rstep[aria-checked=true]{background:var(--terapia);border-color:var(--main)}.rstep[aria-checked=true] span{text-decoration:line-through}
+.rbox{border:1px solid var(--line);border-radius:12px;padding:.8rem;margin:.6rem 0}
+.breath{display:flex;flex-direction:column;align-items:center;gap:1rem;margin:1rem 0}
+#bCircle{width:120px;height:120px;border-radius:50%;background:var(--main);opacity:.7;transform:scale(.6);transition:transform 1s linear}
+#sosFicha div{margin:.3rem 0}#sos .btnlink{background:var(--main);color:var(--main-ink)}
+@media(prefers-reduced-motion:reduce){#bCircle{transition:none!important;transform:scale(1)!important}}
+@media print{nav,#rutinas,#senales,#calma,#ayuda,.sos{display:none!important}}

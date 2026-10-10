@@ -1,5 +1,5 @@
 import { distanceKm, describeDistance, directionsUrl, mapUrl, shareText } from './geo.js';
-import { isNative, scheduleNative } from './native.js';
+import { isNative, scheduleNative, saveFile } from './native.js';
 import { lookup } from './pictos-api.js';
 import { imageUrl } from './pictos.js';
 import { pad, monthKey, daysIn, iso, parseISO, addMonth, autoFill, dueAlarms, toICS } from './logic.js';
@@ -131,11 +131,7 @@ $('regen').onclick = () => {
 };
 $('notpl').onclick = () => { state.template = null; save(); render(); };
 
-$('ics').onclick = () => {
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([toICS(state.events)], { type: 'text/calendar' }));
-  a.download = 'agenda.ics'; a.click();
-};
+$('ics').onclick = () => saveFile('agenda.ics', toICS(state.events), 'text/calendar');
 
 // ---- Alarmas ----
 let audio, beepTimer, current = null;

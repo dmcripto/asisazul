@@ -113,3 +113,67 @@ describe('ubicación en vivo', () => {
     expect(shouldSend(a, { lat: -34.601, lon: -58.38, t: 5000 })).toBe(true); // ~111 m
   });
 });
+
+import { summarize, toCSV } from '../signals.js';
+import { toggleStep, progress, parseSteps, pictoWord, dayKey } from '../routines.js';
+import { breathPhase } from '../calm.js';
+import { telUrl, fichaLines, helpText } from '../help.js';
+describe('registro de señales', () => {
+  const now = new Date(2026, 2, 10, 12).getTime();
+  const e = [
+    { ts: now - 3600000, mood: 2, overload: 3, crisis: true, triggers: ['ruido', 'luces'], note: 'x' },
+    { ts: now - 86400000, mood: 4, overload: 0, crisis: false, triggers: ['ruido'] },
+    { ts: now - 20 * 86400000, mood: 1, crisis: true, triggers: ['multitud'] },
+  ];
+  it('resume los últimos 7 días', () => {
+    const s = summarize(e, now);
+    expect(s).toMatchObject({ n: 2, crises: 1, avgMood: 3 });
+    expect(s.top[0]).toEqual(['ruido', 2]);
+  });
+  it('exporta CSV seguro', () => {
+    const c = toCSV([{ ts: now, mood: 3, crisis: false, triggers: ['ruido'], note: '=1+1, "hola"' }]);
+    expect(c).toContain("\"'=1+1, \"\"hola\"\"\"");
+    expect(c.split('\r\n')).toHaveLength(2);
+  });
+});
+describe('rutinas', () => {
+  const r = { id: 'r', steps: [{ id: 'a' }, { id: 'b' }], day: '2026-03-10', done: {} };
+  it('marca pasos y cuenta el avance', () => {
+    const r1 = toggleStep(r, 'a', '2026-03-10');
+    expect(progress(r1, '2026-03-10')).toEqual({ done: 1, total: 2, complete: false });
+    expect(progress(toggleStep(r1, 'b', '2026-03-10'), '2026-03-10').complete).toBe(true);
+    expect(progress(toggleStep(r1, 'a', '2026-03-10'), '2026-03-10').done).toBe(0); // desmarcar
+  });
+  it('reinicia el avance cada día', () => {
+    const r1 = toggleStep(r, 'a', '2026-03-10');
+    expect(progress(r1, '2026-03-11').done).toBe(0);
+    expect(dayKey(new Date(2026, 2, 5))).toBe('2026-03-05');
+  });
+  it('lee pasos y elige la palabra del pictograma', () => {
+    expect(parseSteps(' Vestirme \n\n Desayunar ')).toEqual(['Vestirme', 'Desayunar']);
+    expect(pictoWord('Me lavo los dientes')).toBe('lavo');
+    expect(pictoWord('Ir al')).toBe('ir');
+  });
+});
+describe('calma y ayuda', () => {
+  it('sigue las fases de la respiración', () => {
+    expect(breathPhase(0)).toMatchObject({ name: 'Inhala', left: 4 });
+    expect(breathPhase(4500)).toMatchObject({ name: 'Mantén', left: 2 });
+    expect(breathPhase(7000)).toMatchObject({ name: 'Exhala', left: 5 });
+    expect(breathPhase(12000)).toMatchObject({ name: 'Inhala', cycle: 1 });
+  });
+  it('arma enlaces de llamada', () => {
+    expect(telUrl('+54 9 11 5555-1234')).toBe('tel:+5491155551234');
+    expect(telUrl('911')).toBe('tel:911');
+    expect(telUrl('12')).toBeNull();
+    expect(telUrl('')).toBeNull();
+  });
+  it('arma el mensaje de ayuda', () => {
+    const f = { name: 'Ana', about: 'Soy autista', allergies: '', howto: 'Hablar bajo' };
+    expect(fichaLines(f)).toEqual(['Me llamo: Ana', 'Debes saber: Soy autista', 'Cómo ayudarme: Hablar bajo']);
+    const m = helpText(f, { lat: 1, lon: 2 });
+    expect(m.split('\n')[0]).toBe('Ana necesita ayuda.');
+    expect(m).toContain('Ubicación: https://www.openstreetmap.org/?mlat=1&mlon=2');
+    expect(helpText({}).split('\n')[0]).toBe('Una persona necesita ayuda.');
+  });
+});

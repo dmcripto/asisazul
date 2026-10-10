@@ -16,10 +16,14 @@
     <button id="theme">🌓 Tema: automático</button>
     <button id="sound">🔔 Activar alarmas</button>
     <button id="where">📍 ¿Dónde estoy?</button>
+    <button id="sosOpen" class="sos">🆘 Necesito ayuda</button>
     <button id="ics">⬇ Exportar al teléfono (.ics)</button>
   </div>
 </header>
 <main>
+  <nav class="bar" aria-label="Secciones">
+    <a class="btnlink" href="#today">Hoy</a><a class="btnlink" href="#rutinas">Rutinas</a><a class="btnlink" href="#senales">Señales</a><a class="btnlink" href="#calma">Calma</a><a class="btnlink" href="#pictos">Pictogramas</a><a class="btnlink" href="#live">Ubicación</a><a class="btnlink" href="#ayuda">Mi ficha</a>
+  </nav>
   <div id="banner"></div>
   <section class="card" id="whereCard" hidden aria-live="polite">
     <h3 style="margin-top:0">¿Dónde estoy?</h3>
@@ -106,6 +110,50 @@
       <div id="liveMapBox" hidden><div id="livePlaces"></div><div id="liveMap" role="img" aria-label="Mapa con la ubicación de tus familiares"></div></div>
     </div>
   </section>
+  <section class="card" id="rutinas">
+    <h3 style="margin-top:0">Rutinas paso a paso</h3>
+    <p>Toca cada paso cuando lo termines. El avance se reinicia solo cada día.</p>
+    <div id="rList"></div>
+    <details><summary>Crear una rutina</summary>
+      <label for="rTitle">Nombre</label><input id="rTitle" placeholder="Ej.: Rutina de la mañana" maxlength="60">
+      <label for="rSteps">Pasos (uno por línea)</label><textarea id="rSteps" rows="5" placeholder="Despertarme&#10;Lavarme los dientes&#10;Vestirme"></textarea>
+      <div class="bar"><button class="primary" id="rAdd">Crear rutina</button></div>
+    </details>
+    <p><small>O empieza con un ejemplo:</small></p><div class="bar" id="rExamples"></div>
+  </section>
+
+  <section class="card" id="senales">
+    <h3 style="margin-top:0">Registro de señales</h3>
+    <p>Anota cómo estás. Sirve para notar patrones y contárselo a tu terapeuta. Queda solo en tu teléfono.</p>
+    <fieldset class="fs"><legend>¿Cómo te sientes?</legend><div class="bar" id="sMood"></div></fieldset>
+    <label for="sOver">Sobrecarga sensorial</label><select id="sOver"></select>
+    <div class="checks" style="margin:.6rem 0"><label><input type="checkbox" id="sCrisis">Tuve una crisis</label></div>
+    <fieldset class="fs"><legend>¿Qué lo provocó?</legend><div class="checks" id="sTrig"></div></fieldset>
+    <label for="sNote">Nota (opcional)</label><textarea id="sNote" rows="2" maxlength="500"></textarea>
+    <div class="bar"><button class="primary" id="sSave">Guardar registro</button></div>
+    <h4>Últimos 7 días</h4><p id="sSum" aria-live="polite"></p><div id="sList"></div>
+    <div class="bar"><button id="sCsv">⬇ Exportar para el terapeuta (.csv)</button><button id="sClear">Borrar todos los registros</button></div>
+  </section>
+
+  <section class="card" id="calma">
+    <h3 style="margin-top:0">Calma</h3>
+    <p>Respira despacio siguiendo el texto. Para cuando todo se siente demasiado.</p>
+    <div class="breath"><div id="bCircle" aria-hidden="true"></div><div id="bText" aria-live="polite" class="big">Listo cuando quieras</div></div>
+    <div class="bar"><button class="primary" id="bGo">▶ Empezar a respirar</button></div>
+    <details><summary>Ejercicio 5-4-3-2-1</summary><ol id="gList"></ol></details>
+  </section>
+
+  <section class="card" id="ayuda">
+    <h3 style="margin-top:0">Mi ficha y contactos de ayuda</h3>
+    <p>Esto se muestra al tocar <b>🆘 Necesito ayuda</b>, para que otra persona sepa cómo ayudarte. Queda solo en tu teléfono.</p>
+    <label for="fiName">Mi nombre</label><input id="fiName" maxlength="60" autocomplete="name">
+    <label for="fiAbout">Lo que debes saber de mí</label><textarea id="fiAbout" rows="2" maxlength="300" placeholder="Ej.: Soy autista. Puedo no poder hablar si estoy muy nervioso."></textarea>
+    <label for="fiAll">Alergias</label><input id="fiAll" maxlength="200">
+    <label for="fiMeds">Medicación</label><input id="fiMeds" maxlength="200">
+    <label for="fiHow">Cómo ayudarme</label><textarea id="fiHow" rows="2" maxlength="300" placeholder="Ej.: Habla despacio y bajo. No me toques sin avisar."></textarea>
+    <label for="fiEmer">Número de emergencias de tu país</label><input id="fiEmer" inputmode="tel" maxlength="20" placeholder="Ej.: 911 (Argentina)">
+    <h4>Contactos de confianza</h4><div id="fiContacts"></div>
+  </section>
 </main>
 
 <dialog id="form">
@@ -133,6 +181,14 @@
   </form>
 </dialog>
 
+<dialog id="sos" aria-labelledby="sosH">
+  <h2 id="sosH" style="margin-top:0">Necesito ayuda</h2>
+  <div id="sosFicha" class="big"></div>
+  <div id="sosCalls" class="bar"></div>
+  <div class="bar"><button class="primary" id="sosSend">📍 Enviar mensaje con mi ubicación</button><button id="sosClose">Cerrar</button></div>
+  <small>Nada se envía solo. Tú eliges a quién y cómo.</small>
+</dialog>
+
 <dialog id="alarm" aria-live="assertive">
   <h2 id="aTitle"></h2><p id="aBody"></p>
   <div class="bar" style="justify-content:center"><button class="primary" id="aOk">Entendido</button><button id="aSnooze">Avisarme en 5 min</button></div>
@@ -141,6 +197,7 @@
 <script src="vendor/leaflet.js"></script>
 <script type="module" src="app.js"></script>
 <script type="module" src="live.js"></script>
+<script type="module" src="extras-ui.js"></script>
 <script type="module" src="pictos-ui.js"></script>
 </body>
 </html>

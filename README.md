@@ -17,6 +17,12 @@ Web para ayudar a personas autistas y con discapacidad a organizar su día. Esta
 - **Ubicación en vivo (propia):** compartir la ubicación en tiempo real con familiares vinculados por un código, con duración limitada y mapa dentro de la app. Usa Supabase con cuentas de correo y contraseña; ver `supabase/README.md` para activarlo. Hasta que se configure, no envía nada.
 - **Compartir mi ubicación con un familiar:** una guía paso a paso (WhatsApp, Google Maps, iPhone) para compartir en vivo con apps que ya existen. Asisazul no envía la ubicación a nadie.
 - **¿Dónde estoy?:** muestra tu posición, con enlace al mapa para copiar o compartir cuando tú quieras.
+- **🆘 Necesito ayuda:** un botón siempre visible que muestra tu ficha en letra grande para que otra persona sepa cómo ayudarte, con botones para llamar a emergencias y a tus contactos, y un mensaje con tu ubicación que tú eliges a quién enviar. Nada se envía solo.
+- **Mi ficha:** nombre, lo que debes saber, alergias, medicación, cómo ayudarte, número de emergencias y 3 contactos de confianza.
+- **Rutinas paso a paso:** listas con pictogramas (mañana, noche o las tuyas). Se marca cada paso y el avance se reinicia cada día.
+- **Registro de señales:** ánimo, sobrecarga sensorial, crisis y qué la provocó. Muestra un resumen de la semana y exporta un .csv para llevar al terapeuta.
+- **Calma:** respiración guiada con texto y cuenta atrás (sin movimiento si el sistema pide reducirlo) y el ejercicio 5-4-3-2-1.
+- **Barra de secciones** para ir directo a cada parte.
 
 ## Diseño y privacidad
 
@@ -76,6 +82,7 @@ Las pruebas (vitest) cubren la lógica pura de `logic.js`: repetir el día de la
 | `pictos.js` | Lógica pura de pictogramas |
 | `pictos-api.js` | Búsqueda en ARASAAC con caché local |
 | `pictos-ui.js` | Pantalla de pictogramas |
+| `extras-ui.js`, `signals.js`, `routines.js`, `calm.js`, `help.js` | Ayuda, ficha, rutinas, señales y calma |
 | `live.js`, `share.js`, `config.js` | Ubicación en vivo (Supabase) |
 | `supabase/` | Tablas, reglas de seguridad y guía de puesta en marcha |
 | `vendor/` | Supabase y Leaflet (mapa), incluidos para que funcionen sin internet de CDN |
@@ -90,8 +97,12 @@ Las pruebas (vitest) cubren la lógica pura de `logic.js`: repetir el día de la
 - Aviso de «es hora de salir» según la ruta y el tráfico, y seguimiento con la pantalla apagada (requiere la app de Android).
 - Probar la ubicación en vivo con un proyecto real de Supabase y dos teléfonos; añadir límite de intentos de códigos antes de abrirla al público.
 - Compartir la agenda con familiares o cuidadores.
+- Copia de seguridad (exportar e importar todos los datos del teléfono).
+- Probar en un teléfono real: exportar archivos (.ics y .csv) con el menú de compartir de Android, y los botones de llamada.
 - Probar el APK en un teléfono real; posponer 5 min en las alarmas nativas.
 - Compartir la agenda con familiares o cuidadores.
+- Copia de seguridad (exportar e importar todos los datos del teléfono).
+- Probar en un teléfono real: exportar archivos (.ics y .csv) con el menú de compartir de Android, y los botones de llamada.
 - Registro de señales (sobrecarga sensorial, ánimo, crisis) y regulación emocional.
 
 ## Créditos

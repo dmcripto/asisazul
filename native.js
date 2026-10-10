@@ -21,3 +21,28 @@ export async function scheduleNative(events) {
     }
   } catch { /* sin permiso o sin plugin: se sigue con las alarmas de la pantalla */ }
 }
+
+// Guarda un archivo y lo comparte. En la app usa el sistema de Android (los enlaces de descarga no funcionan en la app).
+export async function saveFile(name, text, mime) {
+  const P = isNative && cap.Plugins;
+  if (P && P.Filesystem && P.Share) {
+    try {
+      const r = await P.Filesystem.writeFile({ path: name, data: text, directory: 'CACHE', encoding: 'utf8' });
+      await P.Share.share({ title: name, url: r.uri });
+      return;
+    } catch (e) { if (/cancel/i.test(String(e && e.message))) return; }
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type: mime }));
+  a.download = name; a.click();
+}
+
+// Comparte texto (WhatsApp, SMS...). Sin app de compartir, lo copia.
+export async function shareText(text, title = 'Asisazul') {
+  const P = isNative && cap.Plugins;
+  try {
+    if (P && P.Share) return await P.Share.share({ title, text });
+    if (navigator.share) return await navigator.share({ title, text });
+  } catch (e) { return; }
+  try { await navigator.clipboard.writeText(text); alert('Mensaje copiado. Pégalo en un chat.'); } catch { prompt('Copia este mensaje:', text); }
+}
