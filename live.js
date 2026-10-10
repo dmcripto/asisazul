@@ -44,7 +44,9 @@ function init() {
 
   function paintSharing() {
     const on = !!stopTrack, until = mem.until && new Date(mem.until);
-    $('liveStart').hidden = on; $('liveDur').hidden = on; $('liveDurL').hidden = on; $('liveStop').hidden = !on;
+    $('liveDur').hidden = on; $('liveDurL').hidden = on;
+    $('liveToggle').setAttribute('aria-checked', String(on));
+    $('liveToggleTxt').textContent = on ? 'Activado · toca para apagar' : 'Apagado · toca para activar';
     $('liveState').textContent = on ? `🟢 Compartiendo hasta las ${until.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })}` : '⚪ No estás compartiendo tu ubicación.';
   }
 
@@ -71,12 +73,12 @@ function init() {
     try { if (uid) await sb.from('locations').delete().eq('owner', uid); } catch {}
   }
 
-  $('liveStart').onclick = async () => {
+  $('liveToggle').onclick = async () => {
+    if (stopTrack) return end();
     const min = Number($('liveDur').value);
     if (!confirm(`Tus familiares vinculados verán dónde estás durante ${DURATIONS.find((d) => d.min === min).label}. Puedes parar cuando quieras. ¿Empezar?`)) return;
     try { await begin(expiresAt(Date.now(), min)); } catch (e) { fail(e); }
   };
-  $('liveStop').onclick = end;
 
   // ---------- Vincular familiares ----------
   $('liveCode').onclick = async () => {

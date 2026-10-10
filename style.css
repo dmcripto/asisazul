@@ -49,3 +49,7 @@ details{border:1px solid var(--line);border-radius:10px;padding:.5rem .8rem;marg
 @media print{#shareGuide{display:none!important}}
 #liveMap{height:320px;border-radius:12px;margin-top:.5rem}h4{margin:1rem 0 .3rem}
 @media print{#live{display:none!important}}
+.toggle{display:inline-flex;align-items:center;gap:.7rem;min-height:52px;padding:.4rem 1rem .4rem .5rem;border-radius:999px;font-weight:700}
+.toggle .knob{width:34px;height:34px;border-radius:50%;background:var(--mute);flex:none;margin-right:.2rem}
+.toggle[aria-checked=true]{background:var(--main);color:var(--main-ink);border-color:var(--main)}
+.toggle[aria-checked=true] .knob{background:var(--main-ink)}

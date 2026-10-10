@@ -78,7 +78,7 @@
       <p>Tú decides si compartes, con quién y por cuánto tiempo. Solo se guarda tu última posición, y se borra al parar.</p>
       <h4>Compartir mi ubicación</h4>
       <p id="liveState" aria-live="polite"></p>
-      <div class="bar"><label for="liveDur" id="liveDurL" style="margin:0">Durante</label><select id="liveDur" style="width:auto"></select><button class="primary" id="liveStart">📡 Empezar a compartir</button><button id="liveStop" hidden>⏹ Dejar de compartir</button></div>
+      <div class="bar"><label for="liveDur" id="liveDurL" style="margin:0">Durante</label><select id="liveDur" style="width:auto"></select><button id="liveToggle" class="toggle" role="switch" aria-checked="false" aria-label="Compartir mi ubicación en tiempo real"><span class="knob"></span><span id="liveToggleTxt">Apagado</span></button></div>
       <p><b>Familiares que me ven</b></p><div id="liveFollowers"></div>
       <div class="bar"><button id="liveCode">🔑 Crear código para un familiar</button><b id="liveCodeOut" style="font-size:1.6rem;letter-spacing:.2em"></b></div>
       <small id="liveCodeNote"></small>
