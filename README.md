@@ -9,12 +9,14 @@ Web para ayudar a personas autistas y con discapacidad a organizar su día. Esta
 - **Relleno automático de meses:** se carga un mes una vez y se toca «Usar este mes como modelo». Los meses siguientes se completan solos, repitiendo cada evento el mismo día de la semana (por ejemplo, «2.º martes»). Si no existe el 5.º día de la semana, se usa el último. Los eventos automáticos se pueden editar o borrar. «Volver a generar» no toca los que cargaste a mano.
 - **Exportar a .ics:** crea un archivo con alarmas (VALARM) para el calendario del teléfono. Así suenan aunque la web esté cerrada.
 - **Frase en pictogramas:** se escribe (o se dicta) una frase y cada palabra se muestra con su pictograma. Se puede cambiar la imagen de una palabra (↻), quitarla (✕), leer la frase en voz alta e imprimir o guardar en PDF.
+- **Qué pasa hoy:** el día en orden, con letra grande, pictograma, hora, lugar y notas. Marca qué ya pasó y qué sigue.
+- **Pictograma en cada evento:** al crear un evento puedes escribir una palabra (por ejemplo «psicólogo») y se le asigna su pictograma.
 
 ## Diseño y privacidad
 
 - Interfaz calmada, con colores suaves y sin movimiento brusco. Respeta la opción del sistema «reducir movimiento».
 - Texto ajustable con el botón **Aa**.
-- Modo oscuro automático, según la configuración del dispositivo.
+- Modo oscuro: automático según el dispositivo, o elegido a mano con el botón **Tema** (automático, claro u oscuro).
 - Botones grandes.
 - **Pictogramas:** para buscar la imagen, cada palabra escrita se envía a la API pública de ARASAAC. El dictado por voz es opcional y avisa antes: según el navegador, el audio puede ir a un servidor externo.
 - **Los datos de salud son privados:** se guardan solo en tu navegador (`localStorage`). No se envían a ningún servidor.
@@ -46,6 +48,7 @@ Las pruebas (vitest) cubren la lógica pura de `logic.js`: repetir el día de la
 | `app.js` | Interfaz y alarmas |
 | `logic.js` | Lógica pura, sin DOM |
 | `pictos.js` | Lógica pura de pictogramas |
+| `pictos-api.js` | Búsqueda en ARASAAC con caché local |
 | `pictos-ui.js` | Pantalla de pictogramas |
 | `style.css` | Estilos |
 | `tests/agenda-tea.test.ts` | Pruebas |
@@ -54,7 +57,6 @@ Las pruebas (vitest) cubren la lógica pura de `logic.js`: repetir el día de la
 
 - Alarmas en segundo plano en Android.
 - Compartir la agenda con familiares o cuidadores.
-- Pictogramas y vista «qué pasa hoy» paso a paso.
 - Registro de señales (sobrecarga sensorial, ánimo, crisis) y regulación emocional.
 
 ## Créditos

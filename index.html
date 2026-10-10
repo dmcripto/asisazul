@@ -5,18 +5,24 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mi Agenda</title>
 <link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%234b8f8c%27/%3E%3C/svg%3E">
 </head>
 <body>
 <header>
   <h1>📅 Mi Agenda</h1>
   <div class="bar">
     <button id="txt" aria-label="Cambiar tamaño de texto">Aa</button>
+    <button id="theme" aria-label="Cambiar tema">🌓 Tema: automático</button>
     <button id="sound">🔔 Activar alarmas</button>
     <button id="ics">⬇ Exportar al teléfono (.ics)</button>
   </div>
 </header>
 <main>
   <div id="banner"></div>
+  <section class="card" id="today" aria-labelledby="todayH">
+    <h2 id="todayH" style="margin-top:0">Qué pasa hoy</h2>
+    <div id="todayList"></div>
+  </section>
   <div class="bar">
     <button id="prev" aria-label="Mes anterior">◀</button>
     <h2 id="title"></h2>
@@ -56,6 +62,7 @@
     <select id="fType"><option value="terapia">Terapia</option><option value="turno">Turno médico</option><option value="otro">Otro</option></select>
     <label for="fDate">Fecha</label><input id="fDate" type="date" required>
     <label for="fTime">Hora</label><input id="fTime" type="time" required>
+    <label for="fPicto">Pictograma (una palabra, opcional)</label><input id="fPicto" placeholder="Ej.: colegio, médico, psicólogo">
     <label for="fPlace">Lugar</label><input id="fPlace" placeholder="Ej.: Consultorio, calle…">
     <label for="fNotes">Notas (qué llevar, con quién…)</label><textarea id="fNotes" rows="2"></textarea>
     <label>Alarmas (antes del evento)</label>

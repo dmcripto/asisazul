@@ -1,3 +1,5 @@
+import { lookup } from './pictos-api.js';
+import { imageUrl } from './pictos.js';
 import { pad, monthKey, daysIn, iso, parseISO, addMonth, autoFill, dueAlarms, toICS } from './logic.js';
 
 const $ = (id) => document.getElementById(id);
@@ -13,11 +15,34 @@ let sel = iso(now0.getFullYear(), now0.getMonth(), now0.getDate());
 let editing = null;
 
 document.documentElement.style.setProperty('--fs', state.fs + 'px');
+const THEMES = [['auto', 'automático'], ['light', 'claro'], ['dark', 'oscuro']];
+function applyTheme() {
+  const t = state.theme || 'auto';
+  if (t === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.dataset.theme = t;
+  $('theme').textContent = '🌓 Tema: ' + THEMES.find((x) => x[0] === t)[1];
+}
+$('theme').onclick = () => { const i = THEMES.findIndex((x) => x[0] === (state.theme || 'auto')); state.theme = THEMES[(i + 1) % 3][0]; applyTheme(); save(); };
+applyTheme();
 $('dow').innerHTML = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'].map((d) => `<div class="dow">${d}</div>`).join('');
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 const evOn = (d) => state.events.filter((e) => e.date === d).sort((a, b) => a.time.localeCompare(b.time));
 
+const pic = (e) => e.picto ? `<img class="eimg" src="${imageUrl(e.picto)}" alt="" loading="lazy">` : '';
+const lead = (m) => m === 0 ? 'a la hora' : m >= 60 ? m / 60 + ' h antes' : m + ' min antes';
+
+function renderToday() {
+  const d = new Date(), t = iso(d.getFullYear(), d.getMonth(), d.getDate());
+  const hm = pad(d.getHours()) + ':' + pad(d.getMinutes());
+  const evs = evOn(t), nextI = evs.findIndex((e) => e.time >= hm);
+  $('todayList').innerHTML = evs.map((e, i) => {
+    const cls = e.time < hm ? 'past' : i === nextI ? 'now' : '';
+    const tag = e.time < hm ? 'Ya pasó' : i === nextI ? 'Sigue' : 'Después';
+    return `<div class="step ${cls}">${e.picto ? `<img src="${imageUrl(e.picto)}" alt="" loading="lazy">` : ''}<div><span class="tag">${tag}</span><div class="big">${e.time} · ${esc(e.title)}</div>${e.place ? `<div>📍 ${esc(e.place)}</div>` : ''}${e.notes ? `<div>📝 ${esc(e.notes)}</div>` : ''}</div></div>`;
+  }).join('') || '<p style="color:var(--mute)">Hoy no hay nada en la agenda. Día libre.</p>';
+}
+
 function render() {
+  renderToday();
   $('title').textContent = `${MONTHS[view.m]} ${view.y}`;
   const first = new Date(view.y, view.m, 1).getDay(), total = daysIn(view.y, view.m);
   const todayS = iso(now0.getFullYear(), now0.getMonth(), now0.getDate());
@@ -31,7 +56,7 @@ function render() {
   $('grid').innerHTML = html;
   const p = parseISO(sel);
   $('dayTitle').textContent = `${p.d} de ${MONTHS[p.m]}`;
-  $('list').innerHTML = evOn(sel).map((e) => `<div class="item"><div><span class="chip t-${e.type}" style="display:inline-block;font-size:.85rem">${e.time}</span> <b>${esc(e.title)}</b>${e.auto ? ' <small>(automático)</small>' : ''}<br><small>${esc(e.place)} ${esc(e.notes)}</small><br><small>🔔 ${(e.remind || []).map((m) => m === 0 ? 'a la hora' : m >= 60 ? m / 60 + ' h antes' : m + ' min antes').join(', ') || 'sin alarma'}</small></div><div><button data-edit="${esc(e.id)}">Editar</button> <button data-del="${esc(e.id)}" aria-label="Borrar">🗑</button></div></div>`).join('') || '<p style="color:var(--mute)">Nada este día.</p>';
+  $('list').innerHTML = evOn(sel).map((e) => `<div class="item"><div><span class="chip t-${e.type}" style="display:inline-block;font-size:.85rem">${e.time}</span> ${pic(e)}<b>${esc(e.title)}</b>${e.auto ? ' <small>(automático)</small>' : ''}<br><small>${esc(e.place)} ${esc(e.notes)}</small><br><small>🔔 ${(e.remind || []).map(lead).join(', ') || 'sin alarma'}</small></div><div><button data-edit="${esc(e.id)}">Editar</button> <button data-del="${esc(e.id)}" aria-label="Borrar">🗑</button></div></div>`).join('') || '<p style="color:var(--mute)">Nada este día.</p>';
   const k = monthKey(view.y, view.m);
   $('tplName').textContent = `${MONTHS[view.m]} ${view.y}`;
   const t = state.template;
@@ -52,7 +77,7 @@ function openForm(ev) {
   $('fTitle').textContent = ev ? 'Editar evento' : 'Nuevo evento';
   $('fName').value = ev?.title || ''; $('fType').value = ev?.type || 'terapia';
   $('fDate').value = ev?.date || sel; $('fTime').value = ev?.time || '10:00';
-  $('fPlace').value = ev?.place || ''; $('fNotes').value = ev?.notes || '';
+  $('fPicto').value = ev?.pictoWord || ''; $('fPlace').value = ev?.place || ''; $('fNotes').value = ev?.notes || '';
   const r = ev ? ev.remind : [60, 10];
   document.querySelectorAll('#fRemind input').forEach((c) => { c.checked = r.includes(Number(c.value)); });
   $('form').showModal();
@@ -67,11 +92,13 @@ $('f').onsubmit = (e) => {
   if (e.submitter?.value !== 'ok') return;
   const data = {
     title: $('fName').value.trim(), type: $('fType').value, date: $('fDate').value, time: $('fTime').value,
-    place: $('fPlace').value.trim(), notes: $('fNotes').value.trim(),
+    pictoWord: $('fPicto').value.trim().toLowerCase(), place: $('fPlace').value.trim(), notes: $('fNotes').value.trim(),
     remind: [...document.querySelectorAll('#fRemind input:checked')].map((c) => Number(c.value)).sort((a, b) => b - a),
   };
-  if (editing) Object.assign(editing, data, { auto: false });
-  else state.events.push({ id: 'e' + Date.now().toString(36), ...data });
+  let ev = editing;
+  if (ev) { if (ev.pictoWord !== data.pictoWord) delete ev.picto; Object.assign(ev, data, { auto: false }); }
+  else { ev = { id: 'e' + Date.now().toString(36), ...data }; state.events.push(ev); }
+  if (data.pictoWord && !ev.picto) lookup(data.pictoWord).then((f) => { if (f && f[0]) { ev.picto = f[0]; save(); render(); } });
   Object.keys(state.fired).forEach((k) => { if (k.startsWith((editing?.id || '') + '|')) delete state.fired[k]; });
   sel = data.date; const p = parseISO(sel); view = { y: p.y, m: p.m };
   save(); render();
@@ -142,5 +169,5 @@ function tick() {
 
 // Al abrir y cada día: completa los meses que falten.
 if (autoFill(state, new Date()).length) save();
-render(); tick(); setInterval(tick, 15000);
+render(); tick(); setInterval(tick, 15000); setInterval(renderToday, 60000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { if (autoFill(state, new Date()).length) { save(); render(); } tick(); } });
