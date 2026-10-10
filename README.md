@@ -14,6 +14,7 @@ Web para ayudar a personas autistas y con discapacidad a organizar su día. Esta
 - **Cómo llegar:** cada evento con lugar tiene un botón que abre el mapa con la ruta. Si guardaste la ubicación exacta, usa esa; si no, usa el texto del lugar.
 - **Ubicación del evento:** en el formulario, «Usar mi ubicación actual como lugar» guarda el punto exacto (por ejemplo, estando en el consultorio).
 - **Ver cuánto falta:** en «Qué pasa hoy», un botón calcula la distancia en línea recta y un tiempo aproximado a pie.
+- **Efectos suaves en toda la web:** cada pantalla entra con un desvanecido que sube un poco, los mosaicos y tarjetas aparecen de a uno, se elevan apenas al pasar el cursor, los menús y diálogos se abren con suavidad, y las nubes del paisaje se mueven muy despacio. Se apagan solos si el sistema pide «reducir movimiento», o con el interruptor «Efectos suaves» de **Mi ficha**.
 - **Tarjeta de entrada compacta** con el logo, un halo suave y una entrada con desvanecido (sin animación si el sistema pide reducir el movimiento).
 - **Contraseñas con botón «Mostrar / Ocultar»** para no equivocarse al escribirlas.
 - **Ubicación en vivo (propia):** compartir la ubicación en tiempo real con familiares vinculados por un código, con duración limitada y mapa dentro de la app. Usa Supabase con cuentas de correo y contraseña; ver `supabase/README.md` para activarlo. Hasta que se configure, no envía nada.

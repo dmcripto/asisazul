@@ -197,3 +197,44 @@ dialog::backdrop{background:#0007}
 .auth-btns button:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(36,50,56,.16)}
 .auth-btns .linkbtn{border-color:transparent;background:transparent;text-decoration:underline;font-weight:600;min-height:40px}
 .auth-btns .linkbtn:hover{box-shadow:none;transform:none}
+
+/* ---- Efectos suaves en toda la web (se apagan con «reducir movimiento» o con el interruptor de Mi ficha) ---- */
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes drift{from{transform:translateX(-24px)}to{transform:translateX(30px)}}
+@keyframes glow{from{opacity:.2}to{opacity:.42}}
+/* Cada pantalla entra con un desvanecido que sube un poco */
+main > [data-page]:not(.pg-off):not(.tiles):not(.home-grid){animation:rise .5s ease both}
+.hero h1,.hello-sub,.hero-actions{animation:rise .6s ease both}
+.hello-sub{animation-delay:.08s}.hero-actions{animation-delay:.16s}
+/* Mosaicos y tarjetas de la portada: entran de a uno */
+.tile{animation:rise .55s ease both}
+.tile:nth-child(1){animation-delay:.05s}.tile:nth-child(2){animation-delay:.1s}.tile:nth-child(3){animation-delay:.15s}.tile:nth-child(4){animation-delay:.2s}
+.tile:nth-child(5){animation-delay:.25s}.tile:nth-child(6){animation-delay:.3s}.tile:nth-child(7){animation-delay:.35s}.tile:nth-child(8){animation-delay:.4s}
+.hcard{animation:rise .6s ease both}
+.hcard:nth-child(1){animation-delay:.3s}.hcard:nth-child(2){animation-delay:.38s}.hcard:nth-child(3){animation-delay:.46s}.hcard:nth-child(4){animation-delay:.54s}
+/* Se elevan apenas al pasar el cursor o al enfocar */
+.tile,.hcard,.rbox,.pcard,.step,.card{transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+.tile:hover,.tile:focus-visible{transform:translateY(-3px);box-shadow:0 12px 26px rgba(36,50,56,.16)}
+.hcard:hover,.pcard:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(36,50,56,.12)}
+button,.btnlink,.menu>a,.dd-btn,.dd-list a{transition:background .25s ease,border-color .25s ease,transform .2s ease,box-shadow .25s ease}
+button:active,.btnlink:active{transform:scale(.97)}
+.mood{transition:transform .2s ease,background .25s ease}.mood:hover{transform:scale(1.08)}
+.rstep{transition:background .3s ease,border-color .3s ease}
+.day{transition:background .25s ease,border-color .25s ease}
+input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px rgba(111,179,174,.25);border-color:var(--main);outline:none;transition:box-shadow .25s ease,border-color .25s ease}
+input,select,textarea{transition:box-shadow .25s ease,border-color .25s ease}
+.pbar-fg{transition:width .7s ease}
+/* Menús y diálogos */
+.dd.open .dd-list{animation:pop .22s ease both}
+.menu.open{animation:fade .25s ease both}
+dialog[open]{animation:pop .3s ease both}
+dialog::backdrop{animation:fade .3s ease both}
+details[open]>*:not(summary){animation:fade .35s ease both}
+/* Paisaje con vida, muy despacio */
+.nubes{animation:drift 70s ease-in-out infinite alternate}
+.halo{animation:glow 7s ease-in-out infinite alternate}
+/* Interruptor manual: apaga todo el movimiento */
+html[data-fx=off] *,html[data-fx=off] *::before,html[data-fx=off] *::after{animation:none!important;transition:none!important}
+html[data-fx=off] dialog::backdrop{animation:none!important}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after,dialog::backdrop{animation:none!important;transition:none!important}}

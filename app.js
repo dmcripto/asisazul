@@ -31,6 +31,15 @@ function applyTheme() {
 }
 $('theme').onclick = () => { const i = THEMES.findIndex((x) => x[0] === (state.theme || 'auto')); state.theme = THEMES[(i + 1) % 3][0]; applyTheme(); save(); };
 applyTheme();
+// Efectos suaves: se pueden apagar a mano (además de «reducir movimiento» del sistema).
+function applyFx() {
+  const on = state.fx !== 'off';
+  document.documentElement.dataset.fx = on ? 'on' : 'off';
+  $('fxBtn').setAttribute('aria-checked', String(on));
+  $('fxTxt').textContent = 'Efectos suaves: ' + (on ? 'activados' : 'apagados');
+}
+$('fxBtn').onclick = () => { state.fx = state.fx === 'off' ? 'on' : 'off'; applyFx(); save(); };
+applyFx();
 $('dow').innerHTML = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'].map((d) => `<div class="dow">${d}</div>`).join('');
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 const evOn = (d) => state.events.filter((e) => e.date === d).sort((a, b) => a.time.localeCompare(b.time));

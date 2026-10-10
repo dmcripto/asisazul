@@ -56,8 +56,8 @@
     <button id="ics">⬇ Exportar .ics</button>
   </div>
   <svg class="scene" viewBox="0 0 1600 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-    <circle cx="1180" cy="64" r="54" fill="#ffd9a0" opacity=".28"/><circle cx="1180" cy="64" r="34" fill="#ffd9a0"/>
-    <g fill="#fff" opacity=".85"><ellipse cx="260" cy="70" rx="64" ry="18"/><ellipse cx="304" cy="58" rx="40" ry="15"/><ellipse cx="640" cy="44" rx="52" ry="15"/><ellipse cx="676" cy="36" rx="32" ry="12"/><ellipse cx="1420" cy="64" rx="58" ry="16"/><ellipse cx="1456" cy="54" rx="34" ry="12"/></g>
+    <circle class="halo" cx="1180" cy="64" r="54" fill="#ffd9a0" opacity=".28"/><circle cx="1180" cy="64" r="34" fill="#ffd9a0"/>
+    <g class="nubes" fill="#fff" opacity=".85"><ellipse cx="260" cy="70" rx="64" ry="18"/><ellipse cx="304" cy="58" rx="40" ry="15"/><ellipse cx="640" cy="44" rx="52" ry="15"/><ellipse cx="676" cy="36" rx="32" ry="12"/><ellipse cx="1420" cy="64" rx="58" ry="16"/><ellipse cx="1456" cy="54" rx="34" ry="12"/></g>
     <g fill="none" stroke="var(--h3)" stroke-width="3" stroke-linecap="round" opacity=".7"><path d="M930 70q8-9 16 0q8-9 16 0"/><path d="M980 48q7-8 14 0q7-8 14 0"/><path d="M890 104q6-7 12 0q6-7 12 0"/></g>
     <path d="M0 260V150q220-80 470-34t480-12 650 40v116z" fill="var(--h1)"/>
     <path d="M0 260V186q260-52 560-12t520-6 520 18v74z" fill="var(--h2)"/>
@@ -195,6 +195,10 @@
   <section data-page="ayuda" class="card" id="ayuda">
     <h2 class="sh"><svg class="ico a-teal" aria-hidden="true"><use href="#i-ayuda"/></svg>Mi ficha y contactos de ayuda</h2>
     <p>Esto se muestra al tocar <b>🆘 Necesito ayuda</b>, para que otra persona sepa cómo ayudarte. Queda solo en tu teléfono.</p>
+    <h3 class="sub">Pantalla</h3>
+    <div class="bar"><button id="fxBtn" class="toggle" type="button" role="switch" aria-checked="true"><span class="knob"></span><span id="fxTxt">Efectos suaves: activados</span></button></div>
+    <p><small>Los efectos son movimientos lentos y suaves. Se apagan solos si tu teléfono pide «reducir movimiento».</small></p>
+    <h3 class="sub">Mis datos</h3>
     <label for="fiName">Mi nombre</label><input id="fiName" maxlength="60" autocomplete="name">
     <label for="fiAbout">Lo que debes saber de mí</label><textarea id="fiAbout" rows="2" maxlength="300" placeholder="Ej.: Soy autista. Puedo no poder hablar si estoy muy nervioso."></textarea>
     <label for="fiAll">Alergias</label><input id="fiAll" maxlength="200">
