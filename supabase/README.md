@@ -10,7 +10,7 @@ La app guarda la ubicación en tu propio proyecto de Supabase. Sin este paso, la
 En el proyecto:
 1. **Authentication → Sign In / Providers → Email**: déjalo activado y deja **Confirm email** activado.
 2. En esa misma pantalla, sube **Minimum password length** a **8**.
-3. **Authentication → Email Templates**: en **Confirm signup** y en **Reset Password**, cambia el cuerpo del mensaje para que muestre el código en vez del enlace. Por ejemplo: `Tu código de Asisazul es: {{ .Token }}`. La app pide ese código; no usa enlaces.
+3. **Authentication → Email Templates**: en **Confirm signup** y en **Reset Password**, cambia el cuerpo del mensaje para que muestre el código en vez del enlace. Por ejemplo: `Tu código de Asisazul es: {{ .Token }}`. La app pide ese código; no usa enlaces. Tienes los textos listos en `plantilla-confirmar-cuenta.html` y `plantilla-restablecer-clave.html`: abre el archivo, copia todo y pégalo en el cuadro del cuerpo (*Message body*). Asunto sugerido: «Tu código de Asisazul».
 4. **Anonymous Sign-Ins** debe quedar **desactivado**.
 5. El correo que trae Supabase por defecto solo permite unos pocos mensajes por hora. Para usarlo en serio, configura tu propio servidor de correo en **Project Settings → Authentication → SMTP Settings**.
 
