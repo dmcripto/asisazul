@@ -19,6 +19,7 @@ const uid = () => Math.random().toString(36).slice(2, 10);
 // ---------- Rutinas ----------
 function drawRoutines() {
   const day = dayKey();
+  queueMicrotask(() => { if (typeof drawHome === 'function') drawHome(); });
   $('rList').replaceChildren(...data.routines.map((r) => {
     const p = progress(r, day);
     const box = el('div', { className: 'rbox' }, el('b', { textContent: r.title }),
@@ -116,6 +117,24 @@ $('sosSend').onclick = async () => {
   await shareText(helpText(data.ficha, pos), 'Necesito ayuda');
 };
 
+// ---------- Portada: «Tu día» ----------
+$('hMoodBtns').replaceChildren(...FACES.map((f, i) => { const b = el('button', { className: 'mood', textContent: f, type: 'button' }); b.setAttribute('aria-label', FACE_NAMES[i]);
+  b.onclick = () => { data.signals.push({ id: uid(), ts: Date.now(), mood: i + 1, overload: 0, crisis: false, triggers: [], note: '' }); save(); drawSignals(); $('hMoodMsg').textContent = `Anotado: te sientes ${FACE_NAMES[i]}. Gracias por contarlo.`; };
+  return b; }));
+function drawHome() {
+  const day = dayKey(), d = new Date(), hm = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  let evs = []; try { evs = (JSON.parse(localStorage.getItem(KEYS.agenda)).events || []).filter((e) => e.date === day).sort((a, b) => a.time.localeCompare(b.time)); } catch {}
+  const next = evs.find((e) => e.time >= hm);
+  if (next) $('hNextBody').replaceChildren(el('div', { className: 'nextev' }, ...(next.picto ? [el('img', { src: imageUrl(next.picto, 300), alt: '' })] : []), el('div', {}, el('div', { className: 'big', textContent: `${next.time} · ${next.title}` }), el('div', { textContent: next.place ? '📍 ' + next.place : evs.length > 1 ? `Hoy tienes ${evs.length} cosas` : '' }))));
+  else $('hNextBody').innerHTML = `<div class="empty"><svg class="art" viewBox="0 0 160 110" aria-hidden="true"><use href="#art-sol"/></svg><p>${evs.length ? 'Ya hiciste todo lo de hoy. ¡Bien!' : 'Hoy no hay nada pendiente.'}</p></div>`;
+  if (!data.routines.length) $('hRoutinesBody').innerHTML = '<div class="empty"><svg class="art" viewBox="0 0 160 110" aria-hidden="true"><use href="#art-brote"/></svg><p>Crea una rutina y sigue tus pasos aquí.</p></div>';
+  else $('hRoutinesBody').replaceChildren(...data.routines.map((r) => { const p = progress(r, day);
+    return el('div', {}, el('b', { textContent: r.title }), el('div', { textContent: p.complete ? '✅ Completa' : `${p.done} de ${p.total} pasos` }),
+      el('div', { className: 'pbar-bg', ariaHidden: 'true' }, Object.assign(el('div', { className: 'pbar-fg' }), { style: `width:${p.total ? Math.round(100 * p.done / p.total) : 0}%` }))); }));
+}
+window.addEventListener('ficha', drawHome);
+setInterval(drawHome, 60000);
+
 // ---------- Copia de seguridad ----------
 const rd = (k) => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
 $('bkSave').onclick = () => saveFile(`asisazul-copia-${dayKey()}.json`, makeBackup(rd(KEYS.agenda), data), 'application/json');
@@ -131,4 +150,4 @@ $('bkFile').onchange = async (ev) => {
   } catch (e) { alert(e.message); }
 };
 
-drawRoutines(); drawSignals();
+drawRoutines(); drawSignals(); drawHome();

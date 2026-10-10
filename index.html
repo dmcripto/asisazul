@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Asisazul — Mi Agenda</title>
+<title>Inicio</title>
 <link rel="stylesheet" href="vendor/leaflet.css">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%234b8f8c%27/%3E%3C/svg%3E">
@@ -54,18 +54,27 @@
     <button id="where">📍 ¿Dónde estoy?</button>
     <button id="ics">⬇ Exportar .ics</button>
   </div>
-  <svg class="scene" viewBox="0 0 800 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-    <circle cx="660" cy="62" r="34" fill="#ffd9a0"/>
-    <g fill="#fff" opacity=".85"><ellipse cx="140" cy="52" rx="46" ry="14"/><ellipse cx="172" cy="44" rx="30" ry="12"/><ellipse cx="470" cy="36" rx="40" ry="12"/><ellipse cx="496" cy="30" rx="26" ry="10"/></g>
-    <path d="M0 200V120q120-50 260-20t260-12 280 22v90z" fill="var(--h1)"/>
-    <path d="M0 200V150q160-36 330-6t470-8v64z" fill="var(--h2)"/>
-    <g transform="translate(560 110)"><rect x="0" y="22" width="52" height="40" rx="4" fill="#fff6ea"/><path d="M-6 26L26 0l32 26z" fill="#e8b4a0"/><rect x="21" y="38" width="12" height="24" rx="3" fill="var(--h3)"/></g>
-    <g fill="var(--h3)"><rect x="196" y="120" width="6" height="30" rx="3"/><circle cx="199" cy="112" r="20"/><rect x="250" y="132" width="5" height="22" rx="2.5"/><circle cx="252" cy="126" r="14"/><rect x="690" y="130" width="5" height="22" rx="2.5"/><circle cx="692" cy="124" r="15"/></g>
-    <path d="M330 200q40-34 90-40t120-6" fill="none" stroke="#fff6ea" stroke-width="10" stroke-linecap="round" opacity=".8"/>
+  <svg class="scene" viewBox="0 0 1600 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <circle cx="1180" cy="64" r="54" fill="#ffd9a0" opacity=".28"/><circle cx="1180" cy="64" r="34" fill="#ffd9a0"/>
+    <g fill="#fff" opacity=".85"><ellipse cx="260" cy="70" rx="64" ry="18"/><ellipse cx="304" cy="58" rx="40" ry="15"/><ellipse cx="640" cy="44" rx="52" ry="15"/><ellipse cx="676" cy="36" rx="32" ry="12"/><ellipse cx="1420" cy="64" rx="58" ry="16"/><ellipse cx="1456" cy="54" rx="34" ry="12"/></g>
+    <g fill="none" stroke="var(--h3)" stroke-width="3" stroke-linecap="round" opacity=".7"><path d="M930 70q8-9 16 0q8-9 16 0"/><path d="M980 48q7-8 14 0q7-8 14 0"/><path d="M890 104q6-7 12 0q6-7 12 0"/></g>
+    <path d="M0 260V150q220-80 470-34t480-12 650 40v116z" fill="var(--h1)"/>
+    <path d="M0 260V186q260-52 560-12t520-6 520 18v74z" fill="var(--h2)"/>
+    <g transform="translate(720 126)"><rect x="0" y="34" width="86" height="64" rx="6" fill="#fff6ea"/><path d="M-10 40L43 0l53 40z" fill="#e8b4a0"/><rect x="34" y="62" width="18" height="36" rx="4" fill="var(--h3)"/><rect x="10" y="52" width="16" height="16" rx="3" fill="#ffd9a0"/><rect x="62" y="52" width="16" height="16" rx="3" fill="#ffd9a0"/><rect x="62" y="6" width="12" height="22" rx="2" fill="#d99a86"/></g>
+    <g fill="var(--h3)"><rect x="240" y="150" width="8" height="46" rx="4"/><circle cx="244" cy="136" r="32"/><rect x="330" y="170" width="7" height="34" rx="3.5"/><circle cx="333" cy="160" r="22"/><rect x="560" y="176" width="6" height="30" rx="3"/><circle cx="563" cy="168" r="19"/><rect x="1020" y="160" width="8" height="42" rx="4"/><circle cx="1024" cy="148" r="28"/><rect x="1330" y="150" width="8" height="46" rx="4"/><circle cx="1334" cy="136" r="33"/><rect x="1430" y="176" width="6" height="30" rx="3"/><circle cx="1433" cy="168" r="20"/></g>
+    <path d="M762 224q-30 20-70 36M762 224q40 18 90 36" fill="none" stroke="#fff6ea" stroke-width="12" stroke-linecap="round" opacity=".85"/>
+    <g><circle cx="150" cy="226" r="6" fill="#f4b8c7"/><circle cx="182" cy="238" r="5" fill="#ffd9a0"/><circle cx="470" cy="232" r="6" fill="#f4b8c7"/><circle cx="1180" cy="228" r="6" fill="#ffd9a0"/><circle cx="1240" cy="240" r="5" fill="#f4b8c7"/><circle cx="1500" cy="230" r="6" fill="#ffd9a0"/></g>
   </svg>
 </div>
 <main>
-  <nav data-page="home" class="tiles" aria-label="Secciones"><a class="tile" href="#hoy"><svg class="ico a-amber" aria-hidden="true"><use href="#i-hoy"/></svg><span>Hoy</span></a><a class="tile" href="#calendario"><svg class="ico a-teal" aria-hidden="true"><use href="#i-cal"/></svg><span>Calendario</span></a><a class="tile" href="#rutinas"><svg class="ico a-amber" aria-hidden="true"><use href="#i-rutinas"/></svg><span>Rutinas</span></a><a class="tile" href="#senales"><svg class="ico a-lav" aria-hidden="true"><use href="#i-senales"/></svg><span>Señales</span></a><a class="tile" href="#calma"><svg class="ico a-sky" aria-hidden="true"><use href="#i-calma"/></svg><span>Calma</span></a><a class="tile" href="#pictos"><svg class="ico a-rose" aria-hidden="true"><use href="#i-pictos"/></svg><span>Pictogramas</span></a><a class="tile" href="#live"><svg class="ico a-green" aria-hidden="true"><use href="#i-live"/></svg><span>Ubicación</span></a><a class="tile" href="#ayuda"><svg class="ico a-teal" aria-hidden="true"><use href="#i-ayuda"/></svg><span>Mi ficha</span></a></nav>
+  <nav data-page="home" class="tiles" aria-label="Secciones"><a class="tile a-amber" href="#hoy"><svg class="ico" aria-hidden="true"><use href="#i-hoy"/></svg><span class="tt">Hoy</span><span class="td">Tu día paso a paso</span></a><a class="tile a-teal" href="#calendario"><svg class="ico" aria-hidden="true"><use href="#i-cal"/></svg><span class="tt">Calendario</span><span class="td">Citas y alarmas</span></a><a class="tile a-amber" href="#rutinas"><svg class="ico" aria-hidden="true"><use href="#i-rutinas"/></svg><span class="tt">Rutinas</span><span class="td">Mañana y noche</span></a><a class="tile a-lav" href="#senales"><svg class="ico" aria-hidden="true"><use href="#i-senales"/></svg><span class="tt">Señales</span><span class="td">Cómo te sientes</span></a><a class="tile a-sky" href="#calma"><svg class="ico" aria-hidden="true"><use href="#i-calma"/></svg><span class="tt">Calma</span><span class="td">Respirar un rato</span></a><a class="tile a-rose" href="#pictos"><svg class="ico" aria-hidden="true"><use href="#i-pictos"/></svg><span class="tt">Pictogramas</span><span class="td">Frases con imágenes</span></a><a class="tile a-green" href="#live"><svg class="ico" aria-hidden="true"><use href="#i-live"/></svg><span class="tt">Ubicación</span><span class="td">Compartir y llegar</span></a><a class="tile a-teal" href="#ayuda"><svg class="ico" aria-hidden="true"><use href="#i-ayuda"/></svg><span class="tt">Mi ficha</span><span class="td">Datos de ayuda</span></a></nav>
+
+  <section data-page="home" class="home-grid" aria-label="Tu día">
+    <article class="card hcard" id="hNext"><h2 class="sh"><svg class="ico a-amber" aria-hidden="true"><use href="#i-hoy"/></svg>Lo que sigue</h2><div id="hNextBody"></div><a class="btnlink" href="#hoy">Ver mi día</a></article>
+    <article class="card hcard" id="hRoutines"><h2 class="sh"><svg class="ico a-amber" aria-hidden="true"><use href="#i-rutinas"/></svg>Mis rutinas de hoy</h2><div id="hRoutinesBody"></div><a class="btnlink" href="#rutinas">Ir a mis rutinas</a></article>
+    <article class="card hcard" id="hMood"><h2 class="sh"><svg class="ico a-lav" aria-hidden="true"><use href="#i-senales"/></svg>¿Cómo te sientes?</h2><div class="bar" id="hMoodBtns" role="group" aria-label="Cómo te sientes ahora"></div><p id="hMoodMsg" aria-live="polite" class="hmsg">Toca una carita. Queda guardado en tus señales.</p></article>
+    <article class="card hcard" id="hCalm"><h2 class="sh"><svg class="ico a-sky" aria-hidden="true"><use href="#i-calma"/></svg>Un respiro</h2><p>Un minuto para respirar despacio, cuando lo necesites.</p><a class="btnlink" href="#calma">Respirar ahora</a></article>
+  </section>
   <div id="banner" data-page="home"></div>
   <section class="card" id="whereCard" hidden aria-live="polite">
     <h2 class="sh"><svg class="ico a-green" aria-hidden="true"><use href="#i-live"/></svg>¿Dónde estoy?</h2>

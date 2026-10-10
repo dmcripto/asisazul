@@ -9,6 +9,7 @@ function show() {
   const page = current(), inner = page !== 'home';
   if (inner && prev === 'home') cameFromHome = true;
   document.body.dataset.page = page;
+  document.title = inner ? TITLES[page] : 'Inicio';
   document.querySelectorAll('[data-page]').forEach((e) => e.classList.toggle('pg-off', e.dataset.page !== page));
   document.querySelector('.hero').classList.toggle('inner', inner);
   $('back').classList.toggle('pg-off', !inner);
