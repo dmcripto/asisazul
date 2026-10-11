@@ -35,6 +35,7 @@ applyTheme();
 function applyFx() {
   const on = state.fx !== 'off';
   document.documentElement.dataset.fx = on ? 'on' : 'off';
+  document.querySelectorAll('img[data-logo]').forEach((i) => { i.src = on ? 'logo-animado.svg' : 'logo.svg'; });
   $('fxBtn').setAttribute('aria-checked', String(on));
   $('fxTxt').textContent = 'Efectos suaves: ' + (on ? 'activados' : 'apagados');
 }
